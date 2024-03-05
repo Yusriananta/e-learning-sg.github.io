@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2019 at 11:07 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.0
+-- Generation Time: Mar 05, 2024 at 07:50 AM
+-- Server version: 10.1.36-MariaDB
+-- PHP Version: 7.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `ci_online_test`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `a_kegiatan`
+--
+
+CREATE TABLE `a_kegiatan` (
+  `id` int(11) NOT NULL,
+  `pers_no` int(11) NOT NULL,
+  `tanggal` datetime NOT NULL,
+  `id_kuesioner` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `a_kegiatan`
+--
+
+INSERT INTO `a_kegiatan` (`id`, `pers_no`, `tanggal`, `id_kuesioner`) VALUES
+(1, 1805, '2024-02-26 09:55:45', 2),
+(2, 1805, '2024-02-26 09:58:38', 1),
+(3, 1805, '2024-02-26 10:09:37', 1);
 
 -- --------------------------------------------------------
 
@@ -41,8 +63,9 @@ CREATE TABLE `dosen` (
 --
 
 INSERT INTO `dosen` (`id_dosen`, `nip`, `nama_dosen`, `email`, `matkul_id`) VALUES
-(1, '12345678', 'Koro Sensei', 'korosensei@gmail.com', 1),
-(3, '01234567', 'Tobirama Sensei', 'tobirama@gmail.com', 5);
+(1, '00007087', 'DINNY RACHMA PUTRI', 'dinnyrachma@sig.id', 1),
+(2, '00000594', 'RACHMAD SOLIKIN, ST.', 'rachmat@sig.id', 3),
+(3, '00007052', 'WEYLLYA ANGGAR KUSUMA, SE.', 'weyllya@sig.id', 2);
 
 --
 -- Triggers `dosen`
@@ -102,9 +125,7 @@ CREATE TABLE `h_ujian` (
 --
 
 INSERT INTO `h_ujian` (`id`, `ujian_id`, `mahasiswa_id`, `list_soal`, `list_jawaban`, `jml_benar`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`) VALUES
-(1, 1, 1, '1,2,3', '1:B:N,2:A:N,3:D:N', 3, '100.00', '100.00', '2019-02-16 08:35:05', '2019-02-16 08:36:05', 'N'),
-(2, 2, 1, '3,2,1', '3:D:N,2:C:N,1:D:N', 1, '33.00', '100.00', '2019-02-16 10:11:14', '2019-02-16 10:12:14', 'N'),
-(3, 3, 1, '5,6', '5:C:N,6:D:N', 2, '100.00', '100.00', '2019-02-16 11:06:25', '2019-02-16 11:07:25', 'N');
+(24, 1, 2, '1', '1:A:N', 1, '100.00', '100.00', '2024-02-26 10:09:15', '2024-02-26 10:10:15', 'N');
 
 -- --------------------------------------------------------
 
@@ -122,8 +143,8 @@ CREATE TABLE `jurusan` (
 --
 
 INSERT INTO `jurusan` (`id_jurusan`, `nama_jurusan`) VALUES
-(1, 'Sistem Informasi'),
-(2, 'Teknik Informatika');
+(1, 'Organik'),
+(2, 'Outsourching');
 
 -- --------------------------------------------------------
 
@@ -143,9 +164,7 @@ CREATE TABLE `jurusan_matkul` (
 
 INSERT INTO `jurusan_matkul` (`id`, `matkul_id`, `jurusan_id`) VALUES
 (1, 1, 1),
-(2, 1, 2),
-(3, 2, 2),
-(6, 5, 2);
+(2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -164,11 +183,9 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `jurusan_id`) VALUES
-(1, '12.1E.13', 1),
-(2, '11.1A.13', 1),
-(3, '10.1D.13', 1),
-(7, '12.1A.10', 2),
-(8, '12.1B.10', 2);
+(1, 'Produksi Dan Pemeliharaan', 1),
+(2, 'Komunikasi Dan Hukum', 1),
+(3, 'SDM dan Sistem Menejemen', 1);
 
 -- --------------------------------------------------------
 
@@ -187,11 +204,34 @@ CREATE TABLE `kelas_dosen` (
 --
 
 INSERT INTO `kelas_dosen` (`id`, `kelas_id`, `dosen_id`) VALUES
-(1, 3, 1),
-(2, 2, 1),
+(2, 2, 3),
 (3, 1, 1),
-(9, 2, 3),
-(10, 1, 3);
+(4, 3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `k_kegiatan`
+--
+
+CREATE TABLE `k_kegiatan` (
+  `id` int(11) NOT NULL,
+  `id_kuesioner` int(11) NOT NULL,
+  `id_aksi` int(11) NOT NULL,
+  `soal_no` int(11) NOT NULL,
+  `id_opsi` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `k_kegiatan`
+--
+
+INSERT INTO `k_kegiatan` (`id`, `id_kuesioner`, `id_aksi`, `soal_no`, `id_opsi`) VALUES
+(1, 2, 1, 1, 4),
+(2, 1, 2, 1, 1),
+(3, 1, 2, 2, 1),
+(4, 1, 3, 1, 3),
+(5, 1, 3, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -205,13 +245,6 @@ CREATE TABLE `login_attempts` (
   `login` varchar(100) NOT NULL,
   `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `login_attempts`
---
-
-INSERT INTO `login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
-(1, '::1', 'ad', 1550742963);
 
 -- --------------------------------------------------------
 
@@ -233,7 +266,11 @@ CREATE TABLE `mahasiswa` (
 --
 
 INSERT INTO `mahasiswa` (`id_mahasiswa`, `nama`, `nim`, `email`, `jenis_kelamin`, `kelas_id`) VALUES
-(1, 'Muhammad Ghifari Arfananda', '12183018', 'mghifariarfan@gmail.com', 'L', 1);
+(1, 'YUSUF AFANDI, ST., PIA.,ERMAP', '00001443', 'yusuf@sig.id', 'L', 2),
+(2, 'AGUS HIZBULLAH HUDA', '00001805', 'agus@sig.id', 'L', 2),
+(3, 'WAHYU KURNIAWAN, ST.', '00006972', 'wahyu@sig.id', 'L', 2),
+(4, 'MEYGAWAN NURSETO AJI, SE.', '00007318', 'meygawan@sig.id', 'L', 2),
+(5, 'BARKAH FADHLURRAHMAN', '00008289', 'barkah@sig.id', 'L', 2);
 
 -- --------------------------------------------------------
 
@@ -251,10 +288,9 @@ CREATE TABLE `matkul` (
 --
 
 INSERT INTO `matkul` (`id_matkul`, `nama_matkul`) VALUES
-(1, 'Bahasa Inggris'),
-(2, 'Dasar Pemrograman'),
-(3, 'Enterpreneurship'),
-(5, 'Matematika Advanced');
+(1, 'SDM dan Sarana Umum'),
+(2, 'Akuntansi dan Keuangan'),
+(3, 'SMSG');
 
 -- --------------------------------------------------------
 
@@ -280,9 +316,53 @@ CREATE TABLE `m_ujian` (
 --
 
 INSERT INTO `m_ujian` (`id_ujian`, `dosen_id`, `matkul_id`, `nama_ujian`, `jumlah_soal`, `waktu`, `jenis`, `tgl_mulai`, `terlambat`, `token`) VALUES
-(1, 1, 1, 'First Test', 3, 1, 'acak', '2019-02-15 17:25:40', '2019-02-20 17:25:44', 'DPEHL'),
-(2, 1, 1, 'Second Test', 3, 1, 'acak', '2019-02-16 10:05:08', '2019-02-17 10:05:10', 'GOEMB'),
-(3, 3, 5, 'Try Out 01', 2, 1, 'acak', '2019-02-16 07:00:00', '2019-02-28 14:00:00', 'IFSDH');
+(1, 3, 2, 'example', 1, 1, 'acak', '2024-02-26 07:39:38', '2024-02-27 11:39:43', 'EIGJB'),
+(2, 3, 2, 'exeple2', 1, 1, 'acak', '2024-02-26 07:22:26', '2024-02-27 10:24:25', 'MVINA'),
+(3, 3, 2, 'example 3', 1, 1, 'acak', '2024-02-28 08:38:19', '2024-02-29 08:38:23', 'GIVXA');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `p_kuesioner`
+--
+
+CREATE TABLE `p_kuesioner` (
+  `id` int(11) NOT NULL,
+  `id_kegiatan` int(11) NOT NULL,
+  `pertanyaan` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `p_kuesioner`
+--
+
+INSERT INTO `p_kuesioner` (`id`, `id_kegiatan`, `pertanyaan`) VALUES
+(7, 1, 'Bagaimana penilaian Kegiatan ini'),
+(8, 1, 'Bagaimana kesesuian pelatihan dengan kompetensi anda?'),
+(9, 2, 'Bagaimana kesesuian pelatihan dengan kompetensi anda?');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `s_kegiatan`
+--
+
+CREATE TABLE `s_kegiatan` (
+  `id` int(11) NOT NULL,
+  `pers_no` int(11) NOT NULL,
+  `id_kuesioner` int(11) NOT NULL,
+  `tanggal` datetime NOT NULL,
+  `saran` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `s_kegiatan`
+--
+
+INSERT INTO `s_kegiatan` (`id`, `pers_no`, `id_kuesioner`, `tanggal`, `saran`) VALUES
+(1, 1805, 2, '2024-02-26 09:55:45', 'apijsco;ich;sc'),
+(2, 1805, 1, '2024-02-26 09:58:38', 'kurenng bet'),
+(3, 1805, 1, '2024-02-26 10:09:37', 'Apikkkkk');
 
 -- --------------------------------------------------------
 
@@ -318,11 +398,7 @@ CREATE TABLE `tb_soal` (
 --
 
 INSERT INTO `tb_soal` (`id_soal`, `dosen_id`, `matkul_id`, `bobot`, `file`, `tipe_file`, `soal`, `opsi_a`, `opsi_b`, `opsi_c`, `opsi_d`, `opsi_e`, `file_a`, `file_b`, `file_c`, `file_d`, `file_e`, `jawaban`, `created_on`, `updated_on`) VALUES
-(1, 1, 1, 1, '', '', '<p>Dian : The cake is scrumptious! I love i<br>Joni : … another piece?<br>Dian : Thank you. You should tell me the recipe.<br>Joni : I will.</p><p>Which of the following offering expressions best fill the blank?</p>', '<p>Do you mind if you have</p>', '<p>Would you like</p>', '<p>Shall you hav</p>', '<p>Can I have you</p>', '<p>I will bring you</p>', '', '', '', '', '', 'B', 1550225760, 1550225760),
-(2, 1, 1, 1, '', '', '<p>Fitri : The French homework is really hard. I don’t feel like to do it.<br>Rahmat : … to help you?<br>Fitri : It sounds great. Thanks, Rahmat!</p><p><br></p><p>Which of the following offering expressions best fill the blank?</p>', '<p>Would you like me</p>', '<p>Do you mind if I</p>', '<p>Shall I</p>', '<p>Can I</p>', '<p>I will</p>', '', '', '', '', '', 'A', 1550225952, 1550225952),
-(3, 1, 1, 1, 'd166959dabe9a81e4567dc44021ea503.jpg', 'image/jpeg', '<p>What is the picture describing?</p><p><small class=\"text-muted\">Sumber gambar: meros.jp</small></p>', '<p>The students are arguing with their lecturer.</p>', '<p>The students are watching their preacher.</p>', '<p>The teacher is angry with their students.</p>', '<p>The students are listening to their lecturer.</p>', '<p>The students detest the preacher.</p>', '', '', '', '', '', 'D', 1550226174, 1550226174),
-(5, 3, 5, 1, '', '', '<p>(2000 x 3) : 4 x 0 = ...</p>', '<p>NULL</p>', '<p>NaN</p>', '<p>0</p>', '<p>1</p>', '<p>-1</p>', '', '', '', '', '', 'C', 1550289702, 1550289724),
-(6, 3, 5, 1, '98a79c067fefca323c56ed0f8d1cac5f.png', 'image/png', '<p>Nomor berapakah ini?</p>', '<p>Sembilan</p>', '<p>Sepuluh</p>', '<p>Satu</p>', '<p>Tujuh</p>', '<p>Tiga</p>', '', '', '', '', '', 'D', 1550289774, 1550289774);
+(1, 3, 2, 1, '', '', '<p>coba ujian</p>', '<p>benar</p>', '<p>salah</p>', '<p>salah</p>', '<p>salah</p>', '<p>salah</p>', '', '', '', '', '', 'A', 1708576748, 1708576748);
 
 -- --------------------------------------------------------
 
@@ -357,10 +433,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'Administrator', '$2y$12$tGY.AtcyXrh7WmccdbT1rOuKEcTsKH6sIUmDr0ore1yN4LnKTTtuu', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1550743550, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
-(3, '::1', '12183018', '$2y$10$TLtlU8WsPUBQgLWcL5n8SO9YoTd1jDktGIkIvm9Fk2ROI0yJQ.TlC', 'mghifariarfan@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550225511, 1550743572, 1, 'Muhammad', 'Arfananda', NULL, NULL),
-(4, '::1', '12345678', '$2y$10$9CxUKgrB/0tlgOEIec1Fl.RMrLLcpJPGyFqqRh2gec.crgeVBWvym', 'korosensei@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550226286, 1550743600, 1, 'Koro', 'Sensei', NULL, NULL),
-(8, '::1', '01234567', '$2y$10$5pAJAyB3XvrGEkvGak2QI.1pWqwK/S76r3Pf4ltQSGQzLMpw53Tvy', 'tobirama@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550289356, 1550743585, 1, 'Tobirama', 'Sensei', NULL, NULL);
+(1, '127.0.0.1', 'Administrator', '$2y$12$3x/YGTcqQt1I2JO64QLyA.y79W6T8OfnW6LF8ce3eRNYglIERHaRC', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1709613621, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
+(2, '::1', '00001805', '$2y$10$7ZLr9cd.v/58iRDKcLVKo.CB2a41wX8krsZLGMKceD9ghw/m96cJ6', 'agus@sig.id', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1708491641, 1708908972, 1, 'AGUS', 'HUDA', NULL, NULL),
+(3, '::1', '00007087', '$2y$10$WI4jEU6o7FK5ylTsG8o.xOlrHxREJS39G3vBeBwpKhMAr37rtQdM6', 'dinnyrachma@sig.id', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1708576400, 1708658498, 1, 'DINNY', 'PUTRI', NULL, NULL),
+(4, '::1', '00007052', '$2y$10$kjFGNLgqx5usztFipNP6Uu08ggUFAozl.7eyvtVqVkuh.xLuZEq8C', 'weyllya@sig.id', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1708576419, 1709537745, 1, 'WEYLLYA', 'SE.', NULL, NULL),
+(5, '::1', '00000594', '$2y$10$zOpGGOPx1RacrU5JfFPHOObd0DBfI8yRG610lZ4gkBk1om05gQS9q', 'rachmat@sig.id', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1708576426, 1709178013, 1, 'RACHMAD', 'ST.', NULL, NULL),
+(6, '::1', '00006972', '$2y$10$VKqKqJjYLMWPLkbIMv5DD.EJH1g/M6nzj/0NISQyRwHbK.98MUY9u', 'wahyu@sig.id', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1708674838, 1709088629, 1, 'WAHYU', 'ST.', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -380,13 +458,21 @@ CREATE TABLE `users_groups` (
 
 INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 (3, 1, 1),
-(5, 3, 3),
+(4, 2, 3),
+(5, 3, 2),
 (6, 4, 2),
-(10, 8, 2);
+(7, 5, 2),
+(8, 6, 3);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `a_kegiatan`
+--
+ALTER TABLE `a_kegiatan`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `dosen`
@@ -441,6 +527,12 @@ ALTER TABLE `kelas_dosen`
   ADD KEY `dosen_id` (`dosen_id`);
 
 --
+-- Indexes for table `k_kegiatan`
+--
+ALTER TABLE `k_kegiatan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
@@ -468,6 +560,18 @@ ALTER TABLE `m_ujian`
   ADD PRIMARY KEY (`id_ujian`),
   ADD KEY `matkul_id` (`matkul_id`),
   ADD KEY `dosen_id` (`dosen_id`);
+
+--
+-- Indexes for table `p_kuesioner`
+--
+ALTER TABLE `p_kuesioner`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `s_kegiatan`
+--
+ALTER TABLE `s_kegiatan`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tb_soal`
@@ -501,6 +605,12 @@ ALTER TABLE `users_groups`
 --
 
 --
+-- AUTO_INCREMENT for table `a_kegiatan`
+--
+ALTER TABLE `a_kegiatan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `dosen`
 --
 ALTER TABLE `dosen`
@@ -516,7 +626,7 @@ ALTER TABLE `groups`
 -- AUTO_INCREMENT for table `h_ujian`
 --
 ALTER TABLE `h_ujian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `jurusan`
@@ -528,19 +638,25 @@ ALTER TABLE `jurusan`
 -- AUTO_INCREMENT for table `jurusan_matkul`
 --
 ALTER TABLE `jurusan_matkul`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kelas_dosen`
 --
 ALTER TABLE `kelas_dosen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `k_kegiatan`
+--
+ALTER TABLE `k_kegiatan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `login_attempts`
@@ -552,13 +668,13 @@ ALTER TABLE `login_attempts`
 -- AUTO_INCREMENT for table `mahasiswa`
 --
 ALTER TABLE `mahasiswa`
-  MODIFY `id_mahasiswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_mahasiswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `matkul`
 --
 ALTER TABLE `matkul`
-  MODIFY `id_matkul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_matkul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `m_ujian`
@@ -567,22 +683,34 @@ ALTER TABLE `m_ujian`
   MODIFY `id_ujian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `p_kuesioner`
+--
+ALTER TABLE `p_kuesioner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `s_kegiatan`
+--
+ALTER TABLE `s_kegiatan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `tb_soal`
 --
 ALTER TABLE `tb_soal`
-  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_soal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users_groups`
 --
 ALTER TABLE `users_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
