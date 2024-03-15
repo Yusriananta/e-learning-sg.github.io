@@ -28,6 +28,26 @@ class Master_model extends CI_Model
         return $insert;
     }
 
+    public function create_hs($table, $data, $batch = false)
+    {
+        if ($batch === false) {
+            $insert = $this->db->insert($table, $data);
+        } else {
+            $insert = $this->db->insert_batch($table, $data);
+        }
+        return $insert;
+    }
+
+    public function update_hs($table, $data, $pk, $id = null, $batch = false)
+    {
+        if ($batch === false) {
+            $insert = $this->db->update($table, $data, array($pk => $id));
+        } else {
+            $insert = $this->db->update_batch($table, $data, $pk);
+        }
+        return $insert;
+    }
+
     public function delete($table, $data, $pk)
     {
         $this->db->where_in($pk, $data);

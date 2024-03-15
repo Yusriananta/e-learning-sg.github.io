@@ -19,6 +19,8 @@ class Ujian extends CI_Controller {
 
 		$this->user = $this->ion_auth->user()->row();
 		$this->mhs 	= $this->ujian->getIdMahasiswa($this->user->username);
+	// 	print_r($this->user);
+	// exit();
     }
 
     public function akses_admin()
@@ -57,7 +59,7 @@ class Ujian extends CI_Controller {
 
     public function master()
 	{
-		$this->akses_admin();
+		 
         $this->akses_dosen();
         $user = $this->ion_auth->user()->row();
         $data = [
@@ -271,6 +273,7 @@ class Ujian extends CI_Controller {
 
 	public function index()
 	{
+
 		$this->akses_mahasiswa();
 		$key = $this->input->get('key', true);
 		$id  = $this->encryption->decrypt(rawurldecode($key));
@@ -280,9 +283,11 @@ class Ujian extends CI_Controller {
 		
 		$mhs		= $this->mhs;
 		$h_ujian 	= $this->ujian->HslUjian($id, $mhs->id_mahasiswa);
+		
 	
 		$cek_sudah_ikut = $h_ujian->num_rows();
-
+		
+		
 		if ($cek_sudah_ikut < 1) {
 			$soal_urut_ok 	= array();
 			$i = 0;
@@ -327,12 +332,17 @@ class Ujian extends CI_Controller {
 				'tgl_selesai'	=> $waktu_selesai,
 				'status'		=> 'Y'
 			];
-			$this->master->create('h_ujian', $input);
+			if ($cek_sudah_ikut){
+				$this->master->update_jwb('h_ujian', $input);
+			}else{
+				$this->master->create('h_ujian', $input);
+			}
+			
 
 			// Setelah insert wajib refresh dulu
 			redirect('ujian/?key='.urlencode($key), 'location', 301);
 		}
-		
+
 		$q_soal = $h_ujian->row();
 		
 		$urut_soal 		= explode(",", $q_soal->list_jawaban);
@@ -397,6 +407,7 @@ class Ujian extends CI_Controller {
 			'html' 		=> $html,
 			'id_tes'	=> $id_tes
 		];
+		
 		$this->load->view('_templates/topnav/_header.php', $data);
 		$this->load->view('ujian/sheet');
 		$this->load->view('_templates/topnav/_footer.php');
@@ -404,6 +415,7 @@ class Ujian extends CI_Controller {
 
 	public function simpan_satu()
 	{
+		
 		// Decrypt Id
 		$id_tes = $this->input->post('id', true);
 		$id_tes = $this->encryption->decrypt($id_tes);
@@ -421,12 +433,11 @@ class Ujian extends CI_Controller {
 		$d_simpan = [
 			'list_jawaban' => $list_jawaban
 		];
-		
 		// Simpan jawaban
 		$this->master->update('h_ujian', $d_simpan, 'id', $id_tes);
 		$this->output_json(['status'=>true]);
 	}
-
+ 
 	public function simpan_akhir()
 	{
 		// Decrypt Id
@@ -467,6 +478,8 @@ class Ujian extends CI_Controller {
 			'nilai_bobot'	=> number_format(floor($nilai_bobot), 0),
 			'status'		=> 'N'
 		];
+
+		
 
 		$this->master->update('h_ujian', $d_update, 'id', $id_tes);
 		$this->output_json(['status'=>TRUE, 'data'=>$d_update, 'id'=>$id_tes]);

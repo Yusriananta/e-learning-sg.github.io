@@ -36,12 +36,12 @@
           </tbody>
         </table>
         <label for="deskripsi" class="col-sm-4 mt-5 col-form-label">Saran</label>
-        <textarea type="text" class="col-sm-4 form-control" id="saran" name="saran" required=""></textarea>  
+        <textarea type="text" class="col-sm-4 form-control" id="saran" name="saran" require></textarea>  
         <button type="submit" class="btn btn-primary mt-5">Submit</button>
             </form>
 
             <!-- Soal -->
-        <?php $i = 1; foreach ($pertanyaan as $soal) { ?>
+        <!-- <?php $i = 1; foreach ($pertanyaan as $soal) { ?>
                 <label for="soal"><?= $i ?>. <?= $soal['pertanyaan']; ?></label>
                 <div class="position-relative form-group ml-3">
                     <div class="form-row ml-3">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-        <?php $i++;} ?>
+        <?php $i++;} ?> -->
     <!-- end soal -->
 
     </div>
