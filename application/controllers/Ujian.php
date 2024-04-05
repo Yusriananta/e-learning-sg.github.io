@@ -255,9 +255,12 @@ class Ujian extends CI_Controller {
 
 	public function cektoken()
 	{
+		// echo "cekkkkk"; exit();
+		// print_r($_POST);exit();
 		$id = $this->input->post('id_ujian', true);
 		$token = $this->input->post('token', true);
 		$cek = $this->ujian->getUjianById($id);
+		$mhs		= $this->mhs->id_mahasiswa;
 		
 		$data['status'] = $token === $cek->token ? TRUE : FALSE;
 		$this->output_json($data);
@@ -280,15 +283,14 @@ class Ujian extends CI_Controller {
 		
 		$ujian 		= $this->ujian->getUjianById($id);
 		$soal 		= $this->ujian->getSoal($id);
-		
 		$mhs		= $this->mhs;
 		$h_ujian 	= $this->ujian->HslUjian($id, $mhs->id_mahasiswa);
 		
 	
 		$cek_sudah_ikut = $h_ujian->num_rows();
 		
-		
 		if ($cek_sudah_ikut < 1) {
+			echo "ceeeeook";
 			$soal_urut_ok 	= array();
 			$i = 0;
 			foreach ($soal as $s) {
@@ -332,6 +334,8 @@ class Ujian extends CI_Controller {
 				'tgl_selesai'	=> $waktu_selesai,
 				'status'		=> 'Y'
 			];
+			
+
 			if ($cek_sudah_ikut){
 				$this->master->update_jwb('h_ujian', $input);
 			}else{
@@ -342,7 +346,7 @@ class Ujian extends CI_Controller {
 			// Setelah insert wajib refresh dulu
 			redirect('ujian/?key='.urlencode($key), 'location', 301);
 		}
-
+		
 		$q_soal = $h_ujian->row();
 		
 		$urut_soal 		= explode(",", $q_soal->list_jawaban);
@@ -353,7 +357,7 @@ class Ujian extends CI_Controller {
 			$ambil_soal 	= $this->ujian->ambilSoal($pc_urut_soal1, $pc_urut_soal[0]);
 			$soal_urut_ok[] = $ambil_soal; 
 		}
-
+		
 		$detail_tes = $q_soal;
 		$soal_urut_ok = $soal_urut_ok;
 
@@ -367,7 +371,7 @@ class Ujian extends CI_Controller {
 
 			$arr_jawab[$idx] = array("j"=>$val,"r"=>$rg);
 		}
-
+		
 		$arr_opsi = array("a","b","c","d","e");
 		$html = '';
 		$no = 1;
@@ -378,7 +382,7 @@ class Ujian extends CI_Controller {
 				$html .= '<input type="hidden" name="id_soal_'.$no.'" value="'.$s->id_soal.'">';
 				$html .= '<input type="hidden" name="rg_'.$no.'" id="rg_'.$no.'" value="'.$vrg.'">';
 				$html .= '<div class="step" id="widget_'.$no.'">';
-
+				
 				$html .= '<div class="text-center"><div class="w-25">'.tampil_media($path.$s->file).'</div></div>'.$s->soal.'<div class="funkyradio">';
 				for ($j = 0; $j < $this->config->item('jml_opsi'); $j++) {
 					$opsi 			= "opsi_".$arr_opsi[$j];
@@ -393,10 +397,10 @@ class Ujian extends CI_Controller {
 				$no++;
 			}
 		}
-
+		
 		// Enkripsi Id Tes
 		$id_tes = $this->encryption->encrypt($detail_tes->id);
-
+		
 		$data = [
 			'user' 		=> $this->user,
 			'mhs'		=> $this->mhs,
@@ -411,8 +415,9 @@ class Ujian extends CI_Controller {
 		$this->load->view('_templates/topnav/_header.php', $data);
 		$this->load->view('ujian/sheet');
 		$this->load->view('_templates/topnav/_footer.php');
+		
 	}
-
+	
 	public function simpan_satu()
 	{
 		
@@ -433,8 +438,12 @@ class Ujian extends CI_Controller {
 		$d_simpan = [
 			'list_jawaban' => $list_jawaban
 		];
+		$histori = [
+			'list_jawaban' 	=> $list_jawaban	
+		];
 		// Simpan jawaban
 		$this->master->update('h_ujian', $d_simpan, 'id', $id_tes);
+		$this->master->update('hs_h_ujian', $histori, 'id', $id_tes);
 		$this->output_json(['status'=>true]);
 	}
  
@@ -443,10 +452,14 @@ class Ujian extends CI_Controller {
 		// Decrypt Id
 		$id_tes = $this->input->post('id', true);
 		$id_tes = $this->encryption->decrypt($id_tes);
+		$data_tes = $this->db->get_where('h_ujian', ['id' => $id_tes])->row_array();
+		$ujian_id = $data_tes['ujian_id'];
+		
+		$mhs	= $this->mhs;
 		
 		// Get Jawaban
 		$list_jawaban = $this->ujian->getJawaban($id_tes);
-
+		
 		// Pecah Jawaban
 		$pc_jawaban = explode(",", $list_jawaban);
 		
@@ -457,6 +470,13 @@ class Ujian extends CI_Controller {
 		$total_bobot	= 0;
 		$jumlah_soal	= sizeof($pc_jawaban);
 
+		$cek_histori = $this->db->get_where('hs_h_ujian', ['ujian_id '=>$ujian_id, 'mahasiswa_id'=>$mhs->id_mahasiswa])->row_array();
+		if ($cek_histori){
+			$this->db->where('ujian_id', $ujian_id);
+			$this->db->where('mahasiswa_id', $mhs->id_mahasiswa);
+			$this->db->delete('hs_h_ujian');
+		}
+		
 		foreach ($pc_jawaban as $jwb) {
 			$pc_dt 		= explode(":", $jwb);
 			$id_soal 	= $pc_dt[0];
@@ -464,14 +484,43 @@ class Ujian extends CI_Controller {
 			$ragu 		= $pc_dt[2];
 
 			$cek_jwb 	= $this->soal->getSoalById($id_soal);
+			// print_r($cek_jwb);
+			// exit();
+			
+			
+			
 			$total_bobot = $total_bobot + $cek_jwb->bobot;
 
 			$jawaban == $cek_jwb->jawaban ? $jumlah_benar++ : $jumlah_salah++;
-		}
 
+			$hs_jawaban = [
+				'ujian_id'		=> $ujian_id,
+				'mahasiswa_id'	=> $mhs->id_mahasiswa,
+				'id_soal'		=> $cek_jwb->id_soal,
+				'kunci_jawaban'	=> $cek_jwb->jawaban,
+				'list_jawaban'	=> $jawaban,
+				'tanggal'		=> date('Y-m-d')
+			];
+
+			$cek_histori = $this->db->get_where('hs_h_ujian', ['ujian_id '=>$ujian_id, 'mahasiswa_id'=>$mhs->id_mahasiswa])->row_array();
+
+			// $this->db->insert('hs_h_ujian', $hs_jawaban);
+			// print_r($hs_jawaban);
+			// exit();
+
+				$this->db->insert('hs_h_ujian', $hs_jawaban);
+			
+				
+			
+				
+			
+				
+	
+		}
+		
 		$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
 		$nilai_bobot = ($total_bobot / $jumlah_soal)  * 100;
-
+		
 		$d_update = [
 			'jml_benar'		=> $jumlah_benar,
 			'nilai'			=> number_format(floor($nilai), 0),

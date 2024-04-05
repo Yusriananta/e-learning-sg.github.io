@@ -25,8 +25,8 @@ class JurusanMatkul extends CI_Controller {
 	{
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Jurusan Mata Kuliah',
-			'subjudul'=> 'Data Jurusan Mata Kuliah'
+			'judul'	=> 'Tipe Pegawai Unit ',
+			'subjudul'=> 'Data Tipe Pegawai Unit'
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('relasi/jurusanmatkul/data');

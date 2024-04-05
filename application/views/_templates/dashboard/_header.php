@@ -45,6 +45,24 @@
 
 	<!-- include summernote css/js -->
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
+	<style>
+        /* CSS untuk styling thumbnail */
+        .thumbnail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .thumbnail img {
+            width: 200px;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+
 </head>
 
 <!-- Must Load First -->

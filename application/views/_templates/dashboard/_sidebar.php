@@ -95,6 +95,13 @@
 			</li>
 			<?php endif; ?>
 			<?php if( $this->ion_auth->is_admin() || $this->ion_auth->in_group('dosen') ) : ?>
+			<li class="<?=$page==='belajar'?"active":""?>">
+				<a href="<?=base_url('belajar/data')?>" rel="noopener noreferrer">
+					<i class="fa fa-file-text-o"></i> <span>Video Pembelajaran</span>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if( $this->ion_auth->is_admin() || $this->ion_auth->in_group('dosen') ) : ?>
 			<li class="<?=$page==='ujian'?"active":""?>">
 				<a href="<?=base_url('ujian/master')?>" rel="noopener noreferrer">
 					<i class="fa fa-chrome"></i> <span>Ujian</span>
@@ -105,6 +112,13 @@
 			<li class="<?=$page==='ujian'?"active":""?>">
 				<a href="<?=base_url('ujian/list')?>" rel="noopener noreferrer">
 					<i class="fa fa-chrome"></i> <span>Ujian</span>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
+			<li class="<?=$page==='Belajar'?"active":""?>">
+				<a href="<?=base_url('Belajar')?>" rel="noopener noreferrer">
+				<i class="fa fa-book"></i><span>Belajar</span>
 				</a>
 			</li>
 			<?php endif; ?>

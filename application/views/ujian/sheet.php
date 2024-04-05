@@ -1,8 +1,8 @@
 <?php
-if(time() >= $soal->waktu_habis)
-{
-    redirect('ujian/list', 'location', 301);
-}
+// if(time() >= $soal->waktu_habis)
+// {
+//     redirect('ujian/list', 'location', 301);
+// }
 ?>
 <div class="row">
     <div class="col-sm-3">
