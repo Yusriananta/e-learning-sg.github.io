@@ -212,7 +212,7 @@ function selesai() {
         // isiKuesioner(id_tes);
         // alert(id_tes);
         // window.location.href = base_url + 'kuesioner/isi';
-        window.location.replace(base_url + "kuesioner/isi?id=" + id_tes);
+        window.location.replace(base_url + "ujian/logjawaban?=" + id_tes);
         //  type: "POST",
         //     url: base_url + "kuesioner/isi",
         //     data: { id: id_tes },
@@ -232,5 +232,6 @@ function simpan_akhir() {
   simpan();
   if (confirm("Yakin ingin mengakhiri tes?")) {
     selesai();
+    window.location.replace(base_url + "ujian/logjawaban?=" + id_soal);
   }
 }

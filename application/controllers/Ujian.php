@@ -218,7 +218,7 @@ class Ujian extends CI_Controller {
 		$this->output_json($list, false);
 	}
 	
-	public function list()
+	public function lizt()
 	{
 		$this->akses_mahasiswa();
 
@@ -533,5 +533,57 @@ class Ujian extends CI_Controller {
 		$this->master->update('h_ujian', $d_update, 'id', $id_tes);
 		$this->output_json(['status'=>TRUE, 'data'=>$d_update, 'id'=>$id_tes]);
 	}
+
+public function logjawaban(){
+
+	// drypt id 
+	$id_tes = $this->input->post('id', true);
+	$id_tes = $this->encryption->decrypt($id_tes);
+
+	// $ujian = $this->ujian->getUjianById($id_tes);
+	$log = $this->ujian-> getLogujian('', $id_tes);
+	// print_r($log);
+	$dhistori = $this->ujian->getLogujian('');
+	// print_r($dhistori);
+	// Get hasil jawaban
+	$html = '';
+	$no = 1 ;
+	// print_r($html);
+
+	// $markedLogicalAnswers = [];
+
+	// make a foreach statement for True dan false untuk logjawaban
+
+// 	foreach ($dhistori as $jawaban_item) {
+// 		// Panggil model untuk menyimpan jawaban
+// 		// $this->ujian->getLogujian('');
+
+// 		// Cek jawaban benar atau salah
+// 		$cekstatus = $this->ujian->getJawaban($jawaban_item);
+
+// 		// Jika jawaban benar, ubah status menjadi benar, sebaliknya
+// 		if ($cekstatus) {
+// 				$this->ujian->getLogujian($jawaban_item, 'benar');
+// 		} else {
+// 				$this->ujian->getLogujian($jawaban_item, 'salah');
+// 		} 
+
+// }
+	// kirim data nilai dahulu
+	$data = [
+			// 'ujian' => $ujian,
+			// 'log' => $log,
+			// 'markedLogicalAnswers' => $markedLogicalAnswers,
+			'hasil' => $dhistori,
+			'user' => $this->user,
+			'mhs'		=> $this->mhs,
+			'judul'		=> 'Ujian',
+			'subjudul'	=> 'Hasil Ujian',
+	];
+
+	$this->load->view('_templates/topnav/_header.php', $data);
+	$this->load->view('ujian/logujian');
+	$this->load->view('_templates/topnav/_footer.php');
+}
 
 }
