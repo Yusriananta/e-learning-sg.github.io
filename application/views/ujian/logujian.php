@@ -79,6 +79,7 @@
 </div>
 
 <script>
+    // tes script and github
   function logujian() {
             // Melakukan AJAX request ke server
             $.ajax({
