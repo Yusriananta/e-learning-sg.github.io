@@ -142,6 +142,26 @@ class Ujian_model extends CI_Model {
         return $this->db->get('h_ujian')->row();
     }
 
+    // model history jawaban
+
+    public function getLogujian($id_soal){
+        $query = "SELECT hs_h_ujian.id_soal, tb_soal.soal, hs_h_ujian.kunci_jawaban
+        FROM tb_soal
+        LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal
+        ORDER BY hs_h_ujian.id_soal";
+        $result = $this->db->query($query)->result_array();
+        foreach ($result as $row){
+          if ($row['id_soal'] == $id_soal) {
+            $id_soal = $row['id_soal'];
+        }
+      }
+        return $result;
+    }
+
+    public function getLoghsujian(){
+        return $this->db->get('h_ujian')->result_array();
+    }
+
     public function getPertanyaan()
     {
         $query = " SELECT `p_kuesioner`.*, `m_ujian`.`nama_ujian`
