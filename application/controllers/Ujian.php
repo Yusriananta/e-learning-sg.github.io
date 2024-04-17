@@ -531,21 +531,15 @@ class Ujian extends CI_Controller {
 		
 
 		$this->master->update('h_ujian', $d_update, 'id', $id_tes);
-		$this->output_json(['status'=>TRUE, 'data'=>$d_update, 'id'=>$id_tes]);
+		$this->output_json(['status'=>TRUE, 'data'=>$d_update, 'id'=>$id_tes ,'ujian_id'=>$ujian_id]); 
+		// ada penambahan ujian_id json
 	}
 
 public function logjawaban(){
+	$id_tes = $_GET['ujian_id'];
 
-	// drypt id 
-	$id_tes = $this->input->post('id', true);
-	$id_tes = $this->encryption->decrypt($id_tes);
+	$dhistori = $this->ujian->getLogujian($id_tes);
 
-	// $ujian = $this->ujian->getUjianById($id_tes);
-	$log = $this->ujian-> getLogujian('', $id_tes);
-	// print_r($log);
-	$dhistori = $this->ujian->getLogujian('');
-	// print_r($dhistori);
-	// Get hasil jawaban
 	$html = '';
 	$no = 1 ;
 	// print_r($html);

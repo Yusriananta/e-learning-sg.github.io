@@ -66,7 +66,7 @@ class Belajar extends CI_Controller{
 			'subjudul'=> 'Data Pembelajaran',
 		];
 
-        $this->load->view('_templates/dashboard/_header.php', $data);
+    $this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('belajar/data');
 		$this->load->view('_templates/dashboard/_footer.php');
     }
@@ -96,9 +96,9 @@ class Belajar extends CI_Controller{
 			'subjudul'=> 'Edit Pembelajaran',
 		];
 
-        $this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('belajar/edit');
-		$this->load->view('_templates/dashboard/_footer.php');
+      $this->load->view('_templates/dashboard/_header.php', $data);
+			$this->load->view('belajar/edit');
+			$this->load->view('_templates/dashboard/_footer.php');
     }
 
 	
