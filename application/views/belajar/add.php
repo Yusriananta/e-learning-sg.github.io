@@ -6,8 +6,9 @@
                 <div class="form-group">
                   <label for="sel1">Select Kreator:</label>
                   <select class="form-control" id="sel1">
-                    <?php foreach ($kreators as $k):  ?>
-                      <option>1</option>
+                    <?php foreach ($listuser as $k):  ?>
+                      <!-- <option><?= $id++; ?></option> -->
+                      <option><?= $k['first_name']?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>

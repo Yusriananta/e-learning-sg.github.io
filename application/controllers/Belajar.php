@@ -58,7 +58,7 @@ class Belajar extends CI_Controller{
 
 		public function detailvideo(){
 
-			$this->akses_mahasiswa();
+			// $this->akses_mahasiswa();
 
 			$data = [
 				'user' => $this->ion_auth->user()->row(),
