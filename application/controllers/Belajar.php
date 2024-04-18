@@ -51,10 +51,25 @@ class Belajar extends CI_Controller{
 			'subjudul'=> 'Pembelajaran video',
 		];
 
-        $this->load->view('_templates/dashboard/_header.php', $data);
+    $this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('belajar/video');
 		$this->load->view('_templates/dashboard/_footer.php');
     }
+
+		public function detailvideo(){
+
+			$this->akses_mahasiswa();
+
+			$data = [
+				'user' => $this->ion_auth->user()->row(),
+				'judul'	=> 'Pembelajaran',
+				'subjudul'=> 'Pembelajaran video',
+			];
+
+			$this->load->view('_templates/dashboard/_header.php', $data);
+			$this->load->view('belajar/detailvideo.php');
+			$this->load->view('_templates/dashboard/_footer.php');
+		}
 
     public function data()
     {
@@ -79,9 +94,12 @@ class Belajar extends CI_Controller{
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Pembelajaran',
 			'subjudul'=> 'upload Pembelajaran',
+			'listuser'=> $this->db->get('users')->result_array()
 		];
+		// print_r($data['listuser']);
+		// exit();
 
-        $this->load->view('_templates/dashboard/_header.php', $data);
+    $this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('belajar/add');
 		$this->load->view('_templates/dashboard/_footer.php');
     }

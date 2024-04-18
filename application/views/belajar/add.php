@@ -3,6 +3,16 @@
         <div class="col">
         <form>
             <div class="form-group">
+                <div class="form-group">
+                  <label for="sel1">Select Kreator:</label>
+                  <select class="form-control" id="sel1">
+                    <?php foreach ($kreators as $k):  ?>
+                      <option>1</option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+            <div class="form-group">
                 <label for="judul">Judul Pembelajaran</label>
                 <input type="text" class="form-control" id="judul" name="judul" placeholder="max 30 karakter">
             </div>
