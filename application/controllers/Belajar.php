@@ -89,18 +89,51 @@ class Belajar extends CI_Controller{
     public function add()
     {
         $this->akses_admindosen();
+				$kreator    = $this->input->post('kreator');
+				$judul      = $this->input->post('judul');
+				$deskripsi 	= $this->input->post('deskripsi');
 
-        $data = [
+				$data_upload = [
+					'listuser'   => $this->db->get('users')->result_array(),
+					'judul'      => $judul,
+          'deskripsi'  => $deskripsi,
+          'kreator'    => $kreator,
+          'tanggal_upload' => date('Y-m-d H:i:s'),
+				];
+				
+				// $gambar = $this->input->post('gambar');
+				// $video = $_FILES['video'];
+				// if ($video=''){}else{
+				// 	$config['upload_path']          = './assets/video/';
+        //   $config['allowed_types']        = 'mp4|mkv';
+        //   $config['max_size']             = 10000;
+        //   $config['max_width']            = 10240;
+        //   $config['max_height']           = 7680;
+
+				// 	$this->load->library('upload', $config);
+				// 	if (!$this->upload->do_upload('video')) {
+				// 		echo "upload gagal"; die();
+				// 	} else {
+				// 		$video = $this->upload->data('nama_video'); 
+				// 	};
+				// };
+
+
+      $data = [
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Pembelajaran',
 			'subjudul'=> 'upload Pembelajaran',
-			'listuser'=> $this->db->get('users')->result_array()
 		];
+
+		
+		// print_r($data['listuser']);
+
+
 		// print_r($data['listuser']);
 		// exit();
 
     $this->load->view('_templates/dashboard/_header.php', $data);
-		$this->load->view('belajar/add');
+		$this->load->view('belajar/add', $data_upload);
 		$this->load->view('_templates/dashboard/_footer.php');
     }
 

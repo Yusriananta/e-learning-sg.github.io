@@ -31,7 +31,7 @@
                 <input type="file" id="video" name="video">
                 <p class="help-block">Hanya file video (mp4) max 200 mb</p>
             </div>
-            <button type="submit" class="btn btn-danger">Upload</button>
+            <button id="submit" class="btn btn-danger">Upload</button>
         </form>
         </div>
     </div>
