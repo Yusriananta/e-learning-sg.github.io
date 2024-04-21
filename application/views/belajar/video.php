@@ -12,6 +12,7 @@
 
 
     <div class="row">
+      <!-- foreach video -->  
       <div class="col-sm-3 col-md-2">
       <div class="card h-100">
         <div class="thumbnail">
