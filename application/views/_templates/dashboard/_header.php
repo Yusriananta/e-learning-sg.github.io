@@ -71,6 +71,20 @@
 <script src="<?=base_url()?>assets/bower_components/select2/js/select2.full.min.js"></script>
 <script src="<?=base_url()?>assets/bower_components/moment/min/moment.min.js"></script>
 <script src="<?=base_url()?>assets/bower_components/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>		
+<script>
+  const player = new Plyr('video', {captions: {active: true}});
+
+// Expose player so it can be used from the console
+  window.player = player;
+	require([
+        'jquery',
+        'plyr'
+        ], function () {
+            'use strict';
+            const players = Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p));
+    });
+</script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
 <script type="text/javascript">
 	let base_url = '<?=base_url()?>';

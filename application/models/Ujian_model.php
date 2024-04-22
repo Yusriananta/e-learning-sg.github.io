@@ -143,19 +143,59 @@ class Ujian_model extends CI_Model {
     }
 
     // model history jawaban
-
-    public function getLogujian($id_soal){
-        $query = "SELECT hs_h_ujian.id_soal, tb_soal.soal, hs_h_ujian.kunci_jawaban
-        FROM tb_soal
-        LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal
-        ORDER BY hs_h_ujian.id_soal";
-        $result = $this->db->query($query)->result_array();
-        foreach ($result as $row){
-          if ($row['id_soal'] == $id_soal) {
-            $id_soal = $row['id_soal'];
+    public function getDescJwb($param) {
+        // getField
+        if($param=="A"){
+            $field="opsi_a";
+        }else if($param=="B"){
+            $field="opsi_b";
+        }else if($param=="C"){
+            $field="opsi_c";
+        }else if($param=="D"){
+            $field="opsi_d";
+        }else{
+            $field="opsi_e";
         }
+        //end
+        return $field;
+    }
+    public function getDiscJwb($id,$param){
+        $field=$this->getDescJwb($param);
+        $this->db->select($field); 
+        $this->db->from('tb_soal');
+        $this->db->where('id_soal',$id);
+        $data=$this->db->get()->result_array();
+        return $data;
+    }
+
+    public function getLogujian($ujian_id){
+        $query = "SELECT hs_h_ujian.*, tb_soal.soal FROM tb_soal 
+        LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal WHERE ujian_id='$ujian_id' ORDER BY hs_h_ujian.id_soal";
+        $result = $this->db->query($query)->result_array();
+        $a=0;
+        foreach ($result as $row){
+        //   if ($row['id_soal'] == $id_soal) {
+        //     $id_soal = $row['id_soal'];
+        // }
+        // print_r($result[$a]['id_soal']);
+        $jawabanDesc=$this->getDiscJwb($result[$a]['id_soal'],$result[$a]['list_jawaban']);
+        $field=$this->getDescJwb($row['list_jawaban']);
+
+        $newReturn[]=array(
+            'id'=>$row['id'],
+            'ujian_id'=>$row['ujian_id'],
+            'mahasiswa_id'=>$row['mahasiswa_id'],
+            'id_soal'=>$row['id_soal'],
+            'kunci_jawaban'=>$row['kunci_jawaban'],
+            'list_jawaban'=>$row['list_jawaban'],
+            'tanggal'=>$row['tanggal'],
+            'soal'=>$row['soal'],
+            'description'=>$jawabanDesc[0][$field]
+        );
+        $a++;
       }
-        return $result;
+
+        return $newReturn;
     }
 
     public function getLoghsujian(){

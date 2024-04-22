@@ -23,6 +23,7 @@
         </div>
     </div> -->
 
+    
     <div class="col-sm-12">
     <!-- <?=form_open('', array('id'=>'ujian'), array('id'=> $id_tes));?> -->
       <div class="box box-primary">
@@ -39,14 +40,14 @@
         </div>
 
         <div class="box-body">
-        <div class="table-responsive px-4 pb-3" style="border: 0">
+            <div class="table-responsive px-4 pb-3" style="border: 0">
                 <table id="ujian" class="w-100 table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>No.</th>
                         <th>Soal</th>
                         <th>Jawaban</th>
-						            <th>Status</th>
+						<th>Status</th>
                         <!-- <th class="text-center">Aksi</th> -->
                     </tr>        
                 </thead>
@@ -55,8 +56,17 @@
                     <tr>
                       <td><?= $no++;?></td>
                       <td><?= $s['soal'];?></td>
-                      <td><?= $s['kunci_jawaban']?></td>
-                      <!-- <td><?= $s['list_jawaban'];?></td> -->
+                      <td><?= $s['description']?></td>
+                      <td>
+                          <?php 
+                          // Bandingkan jawaban peserta dengan kunci jawaban
+                          if ($s['list_jawaban'] == $s['kunci_jawaban']) {
+                            echo "<span class='badge bg-green'> Benar </span>";
+                          } else {
+                              echo "<span class='badge bg-red'> Salah </span>";
+                          }
+                          ?>
+                      </td>
                     </tr>
                   <?php endforeach;?>
                 </tbody>
@@ -88,6 +98,7 @@
                 data: { action: "logujian" }, // Data yang ingin Anda kirim ke server
                 success: function(response) {
                     console.log("Berhasil memanggil fungsi logujian.");
+                    window.location.replace(base_url + "ujian/lizt");
                     // Lakukan lebih banyak pekerjaan di sini sesuai kebutuhan
                 },
                 error: function(xhr, status, error) {

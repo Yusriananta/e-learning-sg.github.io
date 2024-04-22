@@ -209,29 +209,22 @@ function selesai() {
     success: function (r) {
       console.log(r);
       if (r.status) {
-        // isiKuesioner(id_tes);
-        // alert(id_tes);
-        // window.location.href = base_url + 'kuesioner/isi';
-        window.location.replace(base_url + "ujian/logjawaban?=" + id_tes);
-        //  type: "POST",
-        //     url: base_url + "kuesioner/isi",
-        //     data: { id: id_tes },
-        // success:function(r) {
-        //     alert("success");
+
+        window.location.replace(base_url + "ujian/logjawaban?ujian_id=" + r.ujian_id);
+
       }
     },
   });
 }
 
-function waktuHabis() {
-  selesai();
-  alert("Waktu ujian telah habis!");
-}
+// function waktuHabis() {
+//   selesai();
+  // alert("Waktu ujian telah habis!");
+// }
 
 function simpan_akhir() {
   simpan();
   if (confirm("Yakin ingin mengakhiri tes?")) {
     selesai();
-    window.location.replace(base_url + "ujian/logjawaban?=" + id_soal);
   }
 }
