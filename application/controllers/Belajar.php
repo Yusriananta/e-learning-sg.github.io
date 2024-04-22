@@ -45,10 +45,11 @@ class Belajar extends CI_Controller{
 	public function index()
     {
 
-        $data = [
+      $data = [
 			'user' => $this->ion_auth->user()->row(),
 			'judul'	=> 'Pembelajaran',
 			'subjudul'=> 'Pembelajaran video',
+			'l_video' => $this->db->get('tb_video')->result()
 		];
 
     $this->load->view('_templates/dashboard/_header.php', $data);

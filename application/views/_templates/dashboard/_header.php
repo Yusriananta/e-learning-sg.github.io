@@ -84,6 +84,7 @@
             const players = Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p));
     });
 </script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
 <script type="text/javascript">
 	let base_url = '<?=base_url()?>';

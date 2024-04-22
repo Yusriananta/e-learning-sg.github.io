@@ -13,7 +13,7 @@
     </div> 
   </div>
 
-    
+<!--     
     <div class="row">
     <?php $no=1; foreach ($l_video as $v): ?> 
         <div class="col-sm-3 col-md-2">
@@ -34,7 +34,40 @@
           </div>
         </div>
         <?php endforeach; ?> 
-    </div>
+    </div> -->
+
+    <div class="box-body">
+            <div class="table-responsive px-4 pb-3" style="border: 0">
+                <table id="belajar" class="w-100 table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Gambar</th>
+                        <th>Video</th>
+                        <th>Judul</th>
+						            <th>Deskripsi</th>
+                        <th class="text-center">Aksi</th>
+                        <!-- <th class="text-center">Aksi</th> -->
+                    </tr>        
+                </thead>
+                <tbody>
+                  <?php $no=1; foreach ($l_video as $v):?>
+                    <tr>
+                      <td><?= $no++;?></td>
+                      <td><?= $v->nama_tumbnail?></td>
+                      <td><?= $v->nama_video?></td>
+                      <td><?= $v->judul?></td>
+                      <td><?= $v->deskripsi?></td>
+                      <td>
+                      <a href="<?=base_url('belajar/detailvideo')?>" class="btn btn-primary" role="button">Detail</a>
+                      </td>
+                    </tr>
+                  <?php endforeach;?>
+                </tbody>
+
+                </table>
+            </div>
+        </div>
     
 
 <!-- <ul class="dropdown-menu">
