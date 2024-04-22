@@ -121,11 +121,13 @@ class Belajar extends CI_Controller{
 
 		public function upload(){
 			
-					$file="FILE_" .date('dmY') ."_" .$_FILES['userfile']['name'];
+					$file="FILE_" .date('dmY') ."_" .$_FILES['video']['name'];
 					
 					$this->files_upload($file);
-					if($_FILES['userfile']['name']!=""){
-					echo $_FILES['userfile']['name'];
+					print_r($file);
+					exit();
+					if($_FILES['video']['name']!=""){
+					echo $_FILES['video']['name'];
 							if (!$this->upload->do_upload()){
 					/**
 					 * Jika Gagal Upload
@@ -137,15 +139,16 @@ class Belajar extends CI_Controller{
 							else{
 					/**
 					 * Jika Berhasil Upload
-					 */
+					 */			
 									$file = $this->upload->data("file_name");
 									$data=array(
-											'uploader'    => $this->input->post('p_uploader'),
-											'creator'     => $this->input->post('p_creator'),
+											'uploader'    => $this->input->post('judul'),
+											'creator'     => $this->input->post('creator'),
 											'deskripsi'   => $this->input->post('deskripsi'),
 											'nama_video'  => $file,
 											'nama_tumbnail' => $file
 									);
+									
 									$insertid=$this->belajar_model->insertVideo($data);
 									$this->session->set_flashdata('file', $file);
 									header('location:'.base_url() ."belajar/data".$insertid);
@@ -159,6 +162,58 @@ class Belajar extends CI_Controller{
 							header('location:'.base_url() ."belajar/add");
 			}
 		}
+
+		public function upload_(){
+
+			// $user = $this->ion_auth->user()->row();
+			// print_r($_POST);
+			// exit();
+		
+			if (isset($_POST['submit'])){
+				$this->form_validation->set_rules('judul', 'Judul', 'required');
+
+				$config['upload_path']          = './uploads/';
+        $config['allowed_types']        = 'mp4|mkv|jpg|jpeg|png';
+        $config['max_size']             = 20000;
+        $config['max_width']            = 1200;
+        $config['max_height']           = 800;
+        $config['overwrite']            = true;
+        $this->load->library('upload', $config);
+
+				if (!empty($_FILES['thumbnail'])){
+					$this->upload->do_upload('thumbnail');
+					$data1=$this->upload->data();
+					$gambar = $data1['file_name'];
+				}
+				if (!empty($_FILES['video_up'])){
+          $this->upload->do_upload('video');
+          $data2=$this->upload->data();
+          $video = $data2['file_name'];
+				}
+				if ($this->form_validation->run()){
+					$creator = $this->input->post('creator', true);
+					$judul = $this->input->post('judul', true);
+					$deskripsi = $this->input->post('deskripsi', true);
+					$data = ['creator' => $creator, 'judul' => $judul, 
+										'deskripsi' => $deskripsi, 'thumbnail'=> $gambar, 'video'=>$video];
+
+					$insert = $this->db->insert('tb_video', $data);
+					if ($insert) {
+						$this->session->set_flashdata('success', '<div class="alert alert-success">
+					  Data Berhasil Disimpan </div>');
+						redirect('belajar/add');
+					}
+			}
+			else {
+					$this->data();
+			}
+
+		}
+		else{
+			$this->data();
+	}
+
+}
 
 
 

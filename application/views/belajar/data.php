@@ -54,8 +54,8 @@
                   <?php $no=1; foreach ($l_video as $v):?>
                     <tr>
                       <td><?= $no++;?></td>
-                      <td><?= $v->nama_tumbnail?></td>
-                      <td><?= $v->nama_video?></td>
+                      <td><?= $v->thumbnail?></td>
+                      <td><?= $v->video?></td>
                       <td><?= $v->judul?></td>
                       <td><?= $v->deskripsi?></td>
                       <td>
