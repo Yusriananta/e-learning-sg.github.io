@@ -22,6 +22,7 @@
 	<link rel="stylesheet" href="<?=base_url()?>assets/dist/css/skins/skin-purple.min.css">
 	<link rel="stylesheet" href="<?=base_url()?>assets/bower_components/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="<?=base_url()?>assets/bower_components/pace/pace-theme-flash.css">
+	<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 	
 	<!-- Datatables Buttons -->
 	<link rel="stylesheet" href="<?=base_url()?>assets/bower_components/datatables.net-bs/plugins/Buttons-1.5.6/css/buttons.bootstrap.min.css">

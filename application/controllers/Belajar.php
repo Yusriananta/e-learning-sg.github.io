@@ -57,13 +57,9 @@ class Belajar extends CI_Controller{
 		$this->load->view('_templates/dashboard/_footer.php');
     }
 
-		public function detailvideo(){
+		public function detailvideo($id){
 
-			// $this->akses_mahasiswa();
-			// $id= $_GET['id']; 
-			$tes = $this->belajar->getVideo();
-
-			// $id_video = $this->belajar->getVideoById();
+			$tes = $this->belajar->getVideoById($id);
 			// print_r($tes);
 			// exit();
 
@@ -73,6 +69,7 @@ class Belajar extends CI_Controller{
 				'subjudul'=> 'Pembelajaran video',
 				'g_video' => $tes
 			];
+			
 
 			$this->load->view('_templates/dashboard/_header.php', $data);
 			$this->load->view('belajar/detailvideo.php');
@@ -81,7 +78,9 @@ class Belajar extends CI_Controller{
 
     public function data()
     {
-        $this->akses_admindosen();
+      $this->akses_admindosen();
+			
+
 
       $data = [
 			'user' => $this->ion_auth->user()->row(),
@@ -121,46 +120,16 @@ class Belajar extends CI_Controller{
 
 		public function upload(){
 			
-					$file="FILE_" .date('dmY') ."_" .$_FILES['video']['name'];
+			$user = $this->ion_auth->user()->row();
+
+
+
+			$config['upload_path']          = './uploads/';
+			$config['allowed_types']        = 'mp4|mkv|jpg|jpeg|png';
+			$config['max_size']             = 20000;
+
+
 					
-					$this->files_upload($file);
-					print_r($file);
-					exit();
-					if($_FILES['video']['name']!=""){
-					echo $_FILES['video']['name'];
-							if (!$this->upload->do_upload()){
-					/**
-					 * Jika Gagal Upload
-					 */
-									$error=$this->upload->display_errors();
-									$this->session->set_flashdata('error', $error);
-									header('location:'.base_url() ."belajar/add");
-							}
-							else{
-					/**
-					 * Jika Berhasil Upload
-					 */			
-									$file = $this->upload->data("file_name");
-									$data=array(
-											'uploader'    => $this->input->post('judul'),
-											'creator'     => $this->input->post('creator'),
-											'deskripsi'   => $this->input->post('deskripsi'),
-											'nama_video'  => $file,
-											'nama_tumbnail' => $file
-									);
-									
-									$insertid=$this->belajar_model->insertVideo($data);
-									$this->session->set_flashdata('file', $file);
-									header('location:'.base_url() ."belajar/data".$insertid);
-							}
-					}else{
-				/**
-				 * Jika Tidak ada file
-				 */
-				//$error=$this->upload->display_errors();
-							$this->session->set_flashdata('error', 'No File Selected');
-							header('location:'.base_url() ."belajar/add");
-			}
 		}
 
 		public function upload_(){

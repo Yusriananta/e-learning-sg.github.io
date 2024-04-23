@@ -59,7 +59,7 @@
                       <td><?= $v->judul?></td>
                       <td><?= $v->deskripsi?></td>
                       <td>
-                      <a href="<?=base_url('belajar/detailvideo')?>" class="btn btn-primary" role="button">Detail</a>
+                      <a href="<?=base_url('belajar/detailvideo/'. $v->id)?>" class="btn btn-primary" role="button">Detail</a>
                       </td>
                     </tr>
                   <?php endforeach;?>

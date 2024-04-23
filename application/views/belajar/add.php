@@ -4,7 +4,8 @@
             <?php if ($pesan = $this->session->flashdata('pesan')): ?>
                 <? echo $pesan; ?>
             <?php endif;?>
-        <form action="<?= base_url() ."belajar/upload_" ?>" method="post" enctype="multipart/form-data">
+        <!-- <form action="<?= base_url() ."belajar/upload_" ?>" method="post" enctype="multipart/form-data"> -->
+        <?php echo form_open_multipart('belajar/upload_'); ?>
             <div class="form-group">
                   <label for="creator">Select Kreator:</label>
                   <select class="form-control" id="creator" name="creator">

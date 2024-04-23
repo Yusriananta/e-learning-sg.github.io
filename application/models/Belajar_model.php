@@ -9,10 +9,11 @@ class Belajar_model extends CI_Model {
   }
 
   public function getVideobyId($id){
-    $this->db->where('c.id', $id);
-    $this->db->join('users a','a.id=c.uploader');
-    $this->db->join('users b','b.id=c.creator');
-    return $this->db->get('tb_video c')->row();
+    $query = "SELECT tb_video.*, users.* 
+    FROM tb_video 
+    INNER JOIN users ON tb_video.creator = users.id 
+    WHERE tb_video.id = ?";
+    return $this->db->query($query, array($id))->row_array();
   }
 
   public function insert($data){
@@ -25,7 +26,10 @@ class Belajar_model extends CI_Model {
   }
 
   public function getCreator(){
-    
+    $query = "SELECT * FROM tb_video
+    INNER JOIN users ON tb_video.creator = users.id;";
+    $result = $this->db->query($query)->result_array();
+    return $result;
   }
 
 
