@@ -16,13 +16,11 @@
               <div class="col-sm-3 col-md-2">
               <div class="card h-100">
                 <div class="thumbnail">
-                <img src="<?= base_url('./uploads/'.$v->nama_tumbnail)?>" class="img-fluid">
+                <img src="<?= base_url('./assets/dist/thumbnail/'.$v->thumbnail)?>" class="img-fluid">
                   <div class="caption">
                     <h3><?= $v->judul?></h3>
                     <p><?= $v->deskripsi?></p>
-                    <p><a href="<?=base_url('belajar/detailvideo')?>" class="btn btn-primary" role="button">Detail</a>
-                    <a href="<?=base_url('belajar/edit')?>" class="btn btn-default" role="button">Edit</a>
-                    <a href="<?=base_url('belajar/hapusvideo')?>" class="btn btn-danger" role="button">Hapus</a></p>
+              
                   </div>
                   <div class="card-footer">
                   <small class="text-muted">Last updated 3 mins ago</small>
