@@ -23,7 +23,7 @@
     <style type="text/css">
          html,body{height: 100%;}
          .bg-utama{
-         background-image: url("assets/dist/img/bglearning.jpg");
+         background-image: url("assets/dist/img/PabrikSemenGresik2.jpg");
          background-size: cover;
          background-position: center;
          text-align: center;

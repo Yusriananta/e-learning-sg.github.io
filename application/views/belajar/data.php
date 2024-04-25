@@ -12,92 +12,81 @@
       <a href="<?=base_url('belajar/add')?>" class="btn btn-primary"><i class="fa fa-upload"></i> Upload video</a>
     </div> 
   </div>
-
-<!--     
-    <div class="row">
-    <?php $no=1; foreach ($l_video as $v): ?> 
-        <div class="col-sm-3 col-md-2">
-        <div class="card h-100">
-          <div class="thumbnail">
-          <img src="<?= base_url('./uploads/'.$v->nama_tumbnail)?>" class="img-fluid">
-            <div class="caption">
-              <h3><?= $v->judul?></h3>
-              <p><?= $v->deskripsi?></p>
-              <p><a href="<?=base_url('belajar/detailvideo')?>" class="btn btn-primary" role="button">Detail</a>
-              <a href="<?=base_url('belajar/edit')?>" class="btn btn-default" role="button">Edit</a>
-              <a href="<?=base_url('belajar/hapusvideo')?>" class="btn btn-danger" role="button">Hapus</a></p>
-            </div>
-            <div class="card-footer">
-            <small class="text-muted">Last updated 3 mins ago</small>
-            </div>
-          </div>
-          </div>
-        </div>
-        <?php endforeach; ?> 
-    </div> -->
-
-    <div class="box-body">
-            <div class="table-responsive px-4 pb-3" style="border: 0">
-                <table id="belajar" class="w-100 table table-striped table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Gambar</th>
-                        <th>Video</th>
-                        <th>Judul</th>
-						            <th>Deskripsi</th>
-                        <th class="text-center">Aksi</th>
-                        <!-- <th class="text-center">Aksi</th> -->
-                    </tr>        
-                </thead>
-                <tbody>
-                  <?php $no=1; foreach ($l_video as $v):?>
-                    <tr>
-                      <td><?= $no++;?></td>
-                      <td><?= $v->thumbnail?></td>
-                      <td><?= $v->video?></td>
-                      <td><?= $v->judul?></td>
-                      <td><?= $v->deskripsi?></td>
-                      <td>
-                      <a href="<?=base_url('belajar/detailvideo/'. $v->id)?>" class="btn btn-primary" role="button">Detail</a>
-                      </td>
-                    </tr>
-                  <?php endforeach;?>
-                </tbody>
-
-                </table>
-            </div>
-        </div>
-    
-
-<!-- <ul class="dropdown-menu">
-            <li><a href="<?=base_url('belajar/edit')?>">Edit</a></li>
-            <li><a href="#">Hapus</a></li>
-          </ul> -->
+  <?php echo $this->session->flashdata('message');?>
+              <div class="container" id="videoContainer">
+                <div class="row">
+                  <?php foreach ($l_video as $v): ?> 
+                    <div class="col-md-4">
+                      <div class="card h-100">
+                         <!-- Added anchor tag here -->
+                          <div class="thumbnail">
+                            
+                            <img src="<?= base_url('./assets/dist/thumbnail/'.$v->thumbnail)?>" class="img-thumbnail">
+                            <div class="caption">
+                            <a href="<?= base_url('belajar/detailvideo/'.$v->id) ?>">
+                                <div class="video-title">
+                                    <h4 class="text-left mt-1"><?= $v->judul?></h4>
+                                </div>
+                              </a>
+                                <div class="btn-group">
+                                  <button class="btn btn-default glyphicon glyphicon-option-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  </button>
+                                  <ul class="dropdown-menu">
+                                    <li><a href="<?= base_url('belajar/edit/'. $v->id) ?>">Edit</a></li>
+                                    
+                                    <li><a href="<?= base_url('belajar/delete/'. $v->id) ?>">Delete</a></li>
+                                  </ul>
+                                </div>
+                              <!-- <p ><?= $v->deskripsi?></p> -->
+                              <small class="text-muted">Last updated : <?= $v->tanggal?></small>
+                            </div>
+                          </div>
+                         <!-- Closing anchor tag here -->
+                      </div>
+                    </div>
+                  <?php endforeach; ?> 
+                </div>
+              </div>
 
 
-    <script>
-        // JavaScript untuk memutar video ketika thumbnail diklik
-        function playVideo(videoSrc) {
-            var videoPlayer = document.createElement('video');
-            videoPlayer.src = videoSrc;
-            videoPlayer.controls = true;
-            videoPlayer.autoplay = true;
-            videoPlayer.style.maxWidth = '100%';
-            videoPlayer.style.height = 'auto';
-            videoPlayer.style.marginTop = '20px';
+<style>
+  .thumbnail img {
+  width: 100%;
+  height: 250px; /* Set the height as needed */
+  object-fit: cover;
+}
 
-            var container = document.createElement('div');
-            container.appendChild(videoPlayer);
+.thumbnail{
+  position: relative;
+}
 
-            var closeButton = document.createElement('button');
-            closeButton.textContent = 'Close';
-            closeButton.onclick = function() {
-                container.parentNode.removeChild(container);
-            };
+.card {
+  height: 100%;
+}
 
-            container.appendChild(closeButton);
+.card-footer {
+  position: absolute;
+  bottom: 2px;
+  width: 100%;
+}
 
-            document.body.appendChild(container);
-        }
-    </script>
+.video-title {
+    max-height: 3em; /* Menyesuaikan dengan tinggi dua baris */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2; /* Menampilkan maksimal dua baris */
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+}
+
+.caption{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #FFFF; /* Atur warna latar belakang sesuai kebutuhan */
+    padding: 10px; /* Atur padding sesuai kebutuhan */
+    color: #fff; /* Atur warna teks sesuai kebutuhan */
+}
+
+</style>

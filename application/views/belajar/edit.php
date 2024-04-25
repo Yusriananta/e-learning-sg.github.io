@@ -1,29 +1,64 @@
 <div class="container">
     <div class="row mt-4">
         <div class="col">
-        <form>
+        <?php echo $this->session->flashdata('message');?>
+        <?php echo form_open_multipart('belajar/update_a');?>
+            <div class="form-group">
+                <input type="hidden" class="form-control" id="id" name="id" placeholder="max 30 karakter" value="<?= $g_video['id'] ?>" required>
+            </div>
+            <div class="form-group">
+                  <label for="creator">Select Kreator:</label>
+                  <select class="form-control" id="creator" name="creator" required>
+                    <option value="<?= $g_video['id'] ?>"><?= $g_video['first_name'] ?></option>
+                  <?php 
+                        foreach ($listuser as $u ) {
+                        ?>
+                        <option value="<?= $u->id?>"><?= $u->id ?></option>
+                        <?php
+                        }
+                    ?>
+                  </select>
+              </div>
             <div class="form-group">
                 <label for="judul">Judul Pembelajaran</label>
-                <input type="text" class="form-control" id="judul" name="judul" placeholder="Masukan Judul" require="">
-                <p class="help-block"> max 30 karakter</p>
+                <input type="text" class="form-control" id="judul" name="judul" placeholder="max 30 karakter" value="<?= $g_video['judul'] ?>" required>
             </div>
             <div class="form-group">
                 <label for="deskripsi">Deskripsi</label>
-                <textarea class="form-control" name="deskripsi" id="deskripsi" placeholder="Deskripsi Pembelajaran"></textarea>
-                <p class="help-block"> max 70 karakter</p>
+                <textarea class="form-control" name="deskripsi" id="deskripsi" placeholder="max 70 karakter" required> 
+                <?= $g_video['deskripsi']?>
+                </textarea>
             </div>
             <div class="form-group">
-                <label for="thumnall">Thumnall</label>
-                <input type="file" id="thumnall" name="thumnall">
-                <p class="help-block">Hanya file gambar (jpg/jpeg/png) max 2 mb</p>
+                <label for="tumbnail">Video</label>
+                <div class="container" id="videoContainer">
+                <div class="row">
+                    <div class="col-md-4">
+                     
+                         <!-- Added anchor tag here -->
+                          <div class="thumbnail">
+                            <img src="<?= base_url('./assets/dist/thumbnail/'). $g_video['thumbnail']?>" class="img-thumbnail">
+                            <div class="caption">
+                             
+                            </div>
+                          </div>
+                         <!-- Closing anchor tag here -->
+                      
+                    </div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-                <label for="video">Video Pembelajaran</label>
-                <input type="file" id="video" name="video">
-                <p class="help-block">Hanya file video (mp4) max 200 mb</p>
-            </div>
-            <button type="submit" class="btn btn-danger">Edit</button>
+            
+            <button id="submit" class="btn btn-danger">Edit</button>
         </form>
         </div>
     </div>
 </div>
+
+<style>
+.thumbnail img {
+  width: 100%;
+  height: 250px; /* Set the height as needed */
+  object-fit: cover;
+}
+</style>

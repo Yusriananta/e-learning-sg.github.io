@@ -120,71 +120,60 @@ class Belajar extends CI_Controller{
 
 		public function upload(){
 			
+			$this->load->library('upload');
 			$user = $this->ion_auth->user()->row();
+			$id_user = $user->user_id;
 
+			$config['upload_path']			= './assets/dist/video/';
+			$config['allowed_types']     		= '*';
+			$config['max_size']             	= 1024000; //max 100mb
 
+			$this->upload->initialize($config);
 
-			$config['upload_path']          = './uploads/';
-			$config['allowed_types']        = 'mp4|mkv|jpg|jpeg|png';
-			$config['max_size']             = 20000;
+			if ($this->upload->do_upload('video')){
+				$data2 		= $this->upload->data();
+				$video	= $data2['file_name'];
+			}else{
+				$error2 = $this->upload->display_errors();
+			}
+			$config['upload_path']		= './assets/dist/thumbnail/';
+			$config['allowed_types']      = '*';
+			$config['max_size']           = 2048; //max 2mb
 
+			// $this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			if ($this->upload->do_upload('thumbnail')){
+				$data1 		= $this->upload->data();
+				$thumbnail	= $data1['file_name'];
+			}else{
+				$error1 = $this->upload->display_errors();
+			}
+
+			$data = [
+				'uploader'	=> $id_user,
+				'creator'	=> $this->input->post('creator', TRUE),
+				'judul'		=> $this->input->post('judul', TRUE),
+				'deskripsi'	=> $this->input->post('deskripsi', TRUE),
+				'thumbnail'	=> $thumbnail,
+				'video'		=> $video,
+				'tanggal'	=> date('Y-m-d')
+			];
+
+				$this->db->insert('tb_video', $data);
+				$this->session->set_flashdata('message', '
+				<script>
+				Swal.fire({
+					title: "Video Berhasil di Upload",
+					text: "You clicked the button!",
+					type: "success",
+					});
+				</script>
+				');
+				redirect('belajar/add');
 
 					
 		}
-
-		public function upload_(){
-
-			// $user = $this->ion_auth->user()->row();
-			// print_r($_POST);
-			// exit();
-		
-			if (isset($_POST['submit'])){
-				$this->form_validation->set_rules('judul', 'Judul', 'required');
-
-				$config['upload_path']          = './uploads/';
-        $config['allowed_types']        = 'mp4|mkv|jpg|jpeg|png';
-        $config['max_size']             = 20000;
-        $config['max_width']            = 1200;
-        $config['max_height']           = 800;
-        $config['overwrite']            = true;
-        $this->load->library('upload', $config);
-
-				if (!empty($_FILES['thumbnail'])){
-					$this->upload->do_upload('thumbnail');
-					$data1=$this->upload->data();
-					$gambar = $data1['file_name'];
-				}
-				if (!empty($_FILES['video_up'])){
-          $this->upload->do_upload('video');
-          $data2=$this->upload->data();
-          $video = $data2['file_name'];
-				}
-				if ($this->form_validation->run()){
-					$creator = $this->input->post('creator', true);
-					$judul = $this->input->post('judul', true);
-					$deskripsi = $this->input->post('deskripsi', true);
-					$data = ['creator' => $creator, 'judul' => $judul, 
-										'deskripsi' => $deskripsi, 'thumbnail'=> $gambar, 'video'=>$video];
-
-					$insert = $this->db->insert('tb_video', $data);
-					if ($insert) {
-						$this->session->set_flashdata('success', '<div class="alert alert-success">
-					  Data Berhasil Disimpan </div>');
-						redirect('belajar/add');
-					}
-			}
-			else {
-					$this->data();
-			}
-
-		}
-		else{
-			$this->data();
-	}
-
-}
-
-
 
 		public function files_upload($filename){
 				$config['upload_path']          = './uploads/';
@@ -199,20 +188,96 @@ class Belajar extends CI_Controller{
 
 
 
-    public function edit()
+    public function edit($id)
     {
-        $this->akses_admindosen();
 
-        $data = [
+      $this->akses_admindosen();
+			// echo $id;
+			// exit();
+
+			$g_video = $this->belajar->getVideobyId($id);
+			$creator['first_name']=$this->belajar->getCreator();
+	
+
+      $data = [
 			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Pembelajaran',
+			'judul'	=> 'Edit Pembelajaran',
 			'subjudul'=> 'Edit Pembelajaran',
+			'g_video' => $g_video,
+			'creator' => $creator
 		];
 
       $this->load->view('_templates/dashboard/_header.php', $data);
-			$this->load->view('belajar/edit');
+			$this->load->view('belajar/edit', $data);
 			$this->load->view('_templates/dashboard/_footer.php');
     }
+
+		public function update_a(){
+			
+			$data = [
+      
+				'creator'  => $this->input->post('creator', TRUE),
+				'judul'    => $this->input->post('judul', TRUE),
+				'deskripsi'  => $this->input->post('deskripsi', TRUE)
+			];
+	
+			$id = $this->input->post('id');
+	
+			$this->db->where('id', $id);
+			$this->db->update('tb_video', $data);
+      $this->session->set_flashdata('message', '
+      <script>
+      Swal.fire({
+        title: "Video Berhasil di Update",
+        text: "You clicked the button!",
+        type: "success",
+        });
+      </script>
+      ');
+      redirect('belajar/edit/'.$id);
+    }
+
+		public function delete($id) {
+
+			$this->belajar->getDelete($id);
+			// Array of file paths to be deleted
+			$this->session->set_flashdata('message', '
+      <script>
+      Swal.fire({
+        title: "Video Berhasil di Hapus",
+        text: "You clicked the button!",
+        type: "success",
+        });
+      </script>
+      ');
+      redirect('belajar/data');
+		}
+
+		public function seacrh(){
+
+			$search = $_POST['search'];
+			$query = $this->db->query("SELECT * FROM tb_video WHERE judul LIKE '%$search%' "); 
+			$get_data= $query->result_array();
+			// $g_seacrh = $this->belajar->getSeacrh();
+			
+			print_r(json_encode($get_data));
+			
+
+
+		
+		}
+
+			
+
+
+
+
+
+
+
+
+			
+		
 
 	
 }
