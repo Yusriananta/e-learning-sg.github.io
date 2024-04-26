@@ -2,13 +2,12 @@
     <div class="row mt-4">
         <div class="col">
         <?php echo $this->session->flashdata('message');?>
-        <!-- <form action="<?= base_url() ."belajar/upload_1" ?>" method="post" enctype="multipart/form-data"> -->
-        <?php echo form_open_multipart('belajar/upload_1');?>
+
+        <?php echo form_open_multipart('belajar/upload');?>
             <div class="form-group">
-                <div class="form-group">
-                  <label for="sel1">Select Kreator:</label>
+                  <label for="creator">Select Kreator:</label>
                   <select class="form-control" id="creator" name="creator" required>
-                    <option value="">Pilih creator</option>
+                    <option value="">Pilih Creator</option>
                   <?php 
                         foreach ($listuser as $u ) {
                         ?>
@@ -17,7 +16,6 @@
                         }
                     ?>
                   </select>
-                </div>
               </div>
             <div class="form-group">
                 <label for="judul">Judul Pembelajaran</label>
@@ -28,42 +26,15 @@
                 <textarea class="form-control" name="deskripsi" id="deskripsi" placeholder="max 70 karakter" required></textarea>
             </div>
             <div class="form-group">
-                <label for="thumbnail">Thumnall</label>
-                <input type="file" id="thumbnail" name="thumbnail" required>
+                <label for="tumbnail">Gambar</label>
+                <input type="file" id="tumbnail" name="thumbnail" required>
                 <p class="help-block">Hanya file gambar (jpg/jpeg/png) max 2 mb</p>
             </div>
             <div class="form-group">
-            <!-- <?php 
-                // $error=$this->session->flashdata('error');
-                // if (!empty($error)) {
-                // if(is_array($error)){
-                //     foreach ($error as $key => $value) {
-                //     $err=$error[$key];
-                //     if(is_array($err)){
-                //         foreach ($err as $e) {
-                //         echo "<span class='error'>".$e ."</span>";
-                //         }
-                //     }else{
-                //         echo "<span class='error>".$error[$key]  ."</span>";
-                //     }
-                //     }
-                // }else{
-                //     echo "<span class='error'>".$error  ."</span>";
-                // }
-                // }
-
-                // $file=$this->session->flashdata('file');
-                // if (!empty($file)) {
-                // ?>
-                // <video width="320" height="240" controls>
-                //     <source src="<?= base_url() ."./uploads/" .$file ?>" type="video/mp4">
-                //     Your browser does not support the video tag.
-                // </video> 
-                // <?php
-                // }
-              ?> -->
                 <label for="video">Video Pembelajaran</label>
-                <input type="file" id="video" name="video" required>
+                <div class="col-mg-9">
+                    <input type="file" id="video" name="video" required>
+                </div>
                 <p class="help-block">Hanya file video (mp4) max 100 mb</p>
             </div>
             <button id="submit" class="btn btn-danger">Upload</button>

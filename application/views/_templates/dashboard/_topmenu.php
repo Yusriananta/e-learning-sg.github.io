@@ -3,7 +3,7 @@
 
     <span class="logo-lg">
         <img src="<?=base_url()?>assets/logo/SemenGresikWhite.png" width="40"> 
-        <b>E-</b>Learning <b>SG</b>
+        <b>Digital Library</b><b></b>
     </span>
 </a>
 
