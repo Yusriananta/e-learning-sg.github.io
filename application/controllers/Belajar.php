@@ -117,9 +117,10 @@ class Belajar extends CI_Controller{
 			$this->load->view('belajar/add');
 			$this->load->view('_templates/dashboard/_footer.php');
 		}
+	
 
-		public function upload(){
-			
+	public function upload_1()
+	{
 			$this->load->library('upload');
 			$user = $this->ion_auth->user()->row();
 			$id_user = $user->user_id;
@@ -136,6 +137,7 @@ class Belajar extends CI_Controller{
 			}else{
 				$error2 = $this->upload->display_errors();
 			}
+
 			$config['upload_path']		= './assets/dist/thumbnail/';
 			$config['allowed_types']      = '*';
 			$config['max_size']           = 2048; //max 2mb
@@ -174,18 +176,6 @@ class Belajar extends CI_Controller{
 
 					
 		}
-
-		public function files_upload($filename){
-				$config['upload_path']          = './uploads/';
-        $config['allowed_types']        = 'mp4|mkv|jpg|jpeg|png';
-        $config['max_size']             = 10000;
-        $config['max_width']            = 1200;
-        $config['max_height']           = 800;
-        $config['overwrite']            = true;
-				$config['file_name']            = $filename;
-        $this->load->library('upload', $config);
-		}
-
 
 
     public function edit($id)

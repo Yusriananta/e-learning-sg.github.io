@@ -2,6 +2,7 @@
     <div class="row mt-4">
         <div class="col">
         <?php echo $this->session->flashdata('message');?>
+
         <?php echo form_open_multipart('belajar/upload');?>
             <div class="form-group">
                   <label for="creator">Select Kreator:</label>
@@ -37,7 +38,7 @@
                 <p class="help-block">Hanya file video (mp4) max 100 mb</p>
             </div>
             <button id="submit" class="btn btn-danger">Upload</button>
-        </form>
+        <!-- </form> -->
         </div>
     </div>
 </div>
