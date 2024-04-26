@@ -1,44 +1,24 @@
 $(document).ready(function () {
-  $('#formujian input, #formujian select').on('change', function () {
-      $(this).closest('.form-group').eq(0).removeClass('has-error');
-      $(this).nextAll('.help-block').eq(0).text('');
-  });
+  const player = new Plyr('video', {captions: {active: true}});
 
-  $('#formujian').on('submit', function (e) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
+// Expose player so it can be used from the console
+  window.player = player;
+	require([
+        'jquery',
+        'plyr'
+        ], function () {
+            'use strict';
+            const players = Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p));
+    });
 
-      let btn = $('#submit');
-      btn.attr('disabled', 'disabled').text('Proses...');
+	player.on('ready', (event) => {
+    const instance = event.detail.plyr;
 
-      $.ajax({
-          url: $(this).attr('action'),
-          data: $(this).serialize(),
-          type: 'POST',
-          success: function (data) {
-              btn.removeAttr('disabled').html('<i class="fa fa-save"></i> Simpan');
+    });
+    element.addEventListener('ready', (event) => {
+    const player = event.detail.plyr;
+    });
 
-              if (data.status) {
-                  Swal({
-                      "title": "Berhasil",
-                      "type": "success",
-                      "text": "Data berhasil disimpan"
-                  }).then(result => {
-                      window.location = "master";
-                  });
-              } else {
-                  if (data.errors) {
-                      $.each(data.errors, function (key, val) {
-                          $('[name="' + key + '"]').closest('.form-group').eq(0).addClass('has-error');
-                          $('[name="' + key + '"]').nextAll('.help-block').eq(0).text(val);
-                          if (val === '') {
-                              $('[name="' + key + '"]').closest('.form-group').eq(0).removeClass('has-error');
-                              $('[name="' + key + '"]').nextAll('.help-block').eq(0).text('');
-                          }
-                      });
-                  }
-              }
-          }
-      });
-  });
+    
+ 
 });
