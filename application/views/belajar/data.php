@@ -28,17 +28,24 @@
                                     <h4 class="text-left mt-1"><?= $v->judul?></h4>
                                 </div>
                               </a>
-                                <div class="btn-group">
-                                  <button class="btn btn-default glyphicon glyphicon-option-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  </button>
-                                  <ul class="dropdown-menu">
-                                    <li><a href="<?= base_url('belajar/edit/'. $v->id) ?>">Edit</a></li>
-                                    
-                                    <li><a href="<?= base_url('belajar/delete/'. $v->id) ?>">Delete</a></li>
-                                  </ul>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="btn-group">
+                                    <button class="btn btn-default glyphicon glyphicon-option-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a href="<?= base_url('belajar/edit/'. $v->id) ?>">Edit</a></li>
+                                      <li><a href="<?= base_url('belajar/delete/'. $v->id) ?>">Delete</a></li>
+                                    </ul>
+                                  </div>
                                 </div>
-                              <!-- <p ><?= $v->deskripsi?></p> -->
-                              <small class="text-muted">Last updated : <?= $v->tanggal?></small>
+                                <div class="col-md-6">
+                                  <small class="text-muted pull-right">Last updated : <?= $v->tanggal?></small>
+                                </div>
+                                <div class="col-md-6">
+                                  <small class="text-muted pull-right"><?= $v->views?>x ditonton</small>
+                                </div>
+                              </div>
                             </div>
                           </div>
                          <!-- Closing anchor tag here -->

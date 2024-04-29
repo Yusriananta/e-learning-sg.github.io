@@ -70,6 +70,13 @@ class Belajar_model extends CI_Model {
     $this->db->like('judul', 'deskripsi');
   }
 
+  function getViews($id) {
+      $this->db->set('views', 'views + 1', FALSE);
+      $this->db->where('id', $id);
+      $this->db->update('tb_video'); 
+  }
+
+  
 
 
 

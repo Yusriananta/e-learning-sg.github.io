@@ -24,9 +24,15 @@
                                 <h4 class="text-left mt-1 text-default"><?= $v->judul?></h4>
                               </div>
                               </a>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <small class="text-muted">Last updated : <?= $v->tanggal?></small>
+                                </div>
+                                <div class="col-md-6">
+                                  <small class="text-muted pull-right"><?= $v->views?>x ditonton</small>
+                                </div>
+                              </div>
                               
-                              <!-- <p ><?= $v->deskripsi?></p> -->
-                              <small class="text-muted">Last updated : <?= $v->tanggal?></small>
                             </div>
                           </div>
                          <!-- Closing anchor tag here -->
@@ -85,7 +91,7 @@
 </style>
 
 <script>
-function search() {
+  function search() {
     var searchValue = $("#search").val();
     $.ajax({
         url: base_url + "belajar/seacrh/",
@@ -122,5 +128,9 @@ function search() {
             console.error(xhr.responseText);
         }
     }); 
+
+  function update_views(){
+
+  }
 }
 </script>
