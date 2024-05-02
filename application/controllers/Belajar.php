@@ -59,13 +59,13 @@ class Belajar extends CI_Controller{
 
 		public function detailvideo($id){
 
+			if ( !$this->ion_auth->is_admin() && !$this->ion_auth->in_group('dosen') ){
+				$this->belajar->getViews($id);
+			} 
 			// $this->belajar->getViews();
 			$tes = $this->belajar->getVideoById($id);		
 
-			$t_view = $this->belajar->getViews($id);
-
 			
-
 			$data = [
 				'user' => $this->ion_auth->user()->row(),
 				'judul'	=> 'Pembelajaran',

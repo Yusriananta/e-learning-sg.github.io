@@ -70,13 +70,39 @@ class Belajar_model extends CI_Model {
     $this->db->like('judul', 'deskripsi');
   }
 
-  function getViews($id) {
+  public function getViews($id) {
       $this->db->set('views', 'views + 1', FALSE);
       $this->db->where('id', $id);
       $this->db->update('tb_video'); 
   }
 
-  
+  public function getFilterview($id) {
+    // Lakukan query untuk mendapatkan role pengguna dari tabel groups
+    $query = $this->db->select('name')
+                      ->where('id', $id)
+                      ->get('groups');
+                      
+    if ($query->num_rows() > 0) {
+        $userRole = $query->row()->name;
+        // Cek jika pengguna adalah mahasiswa
+        if ($userRole == 'mahasiswa') {
+            $this->db->set('views', 'views + 1', FALSE);
+            $this->db->where('id', $id);
+            $this->db->update('tb_video');
+        }
+        // Untuk admin dan dosen, tidak ada aksi yang dilakukan
+    } 
+}
+
+public function getAlldatavid(){
+  $query = "SELECT *
+  FROM tb_video AS v
+  JOIN users AS u ON v.id = u.id
+  JOIN users_groups AS ug ON u.id = ug.user_id
+  JOIN `groups` AS g ON ug.group_id = g.id;";
+  $result = $this->db->query($query)->result_array();
+  return $result;
+}
 
 
 
