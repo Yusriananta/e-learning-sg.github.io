@@ -122,6 +122,13 @@
 				</a>
 			</li>
 			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
+			<li class="<?=$page==='kuesioner'?"active":""?>">
+				<a href="<?=base_url('kuesioner/listkuesioner')?>" rel="noopener noreferrer">
+				<i class="fa fa-list-ol"></i><span>Kuesioner</span>
+				</a>
+			</li>
+			<?php endif; ?>
 			<?php if( !$this->ion_auth->in_group('mahasiswa') ) : ?>
 			<li class="header">REPORTS</li>
 			<li class="<?=$page==='hasilujian'?"active":""?>">

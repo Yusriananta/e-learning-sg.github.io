@@ -161,4 +161,20 @@ class kuesioner extends CI_Controller{
 		$this->load->view('kuesioner/kegiatanDetail', $data);
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
+
+	public function listkuesioner(){
+			$this->akses_mahasiswa();
+
+			$data = [
+				'user' => $this->ion_auth->user()->row(),
+        'judul'  => 'Kuesioner',
+        'subjudul'=> 'List Kuesioner',
+			];
+
+
+
+			$this->load->view('_templates/dashboard/_header.php', $data);
+			$this->load->view('kuesioner/listkuesioner', $data);
+			$this->load->view('_templates/dashboard/_footer.php');
+	}
 }
