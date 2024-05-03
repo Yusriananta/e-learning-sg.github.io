@@ -13,15 +13,29 @@
             </div>
         </div>
     </div>
+    <?php echo $this->session->flashdata('message');?>
     <div class="table-responsive px-4 pb-3" style="border: 0">
-        <table id="hasil" class="w-100 table table-striped table-bordered table-hover">
+        <table id="mhs" class="w-100 table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th>No.</th>
+                <th width = "50px">No.</th>
                 <th>Nama Ujian</th>
-                <th>Action</th>
+                <th width = "100px">Action</th>
             </tr>        
         </thead>
+        <tbody>
+              <?php $no=1; foreach ($mhs as $s):?>
+                <tr>
+                  <td><?= $no++;?></td>
+                  <td><?= $s['nama_ujian'];?></td>
+                  <td>
+                    <a href="<?= base_url('kuesioner/isi/') . $s['id_ujian']; ?>" class="btn btn-xs btn-primary">
+                        <i class="fa fa-sticky-note"></i> Detail
+                    </a>
+                  </td>
+                </tr>
+              <?php endforeach;?>
+        </tbody>       
         
         </table>
     </div>

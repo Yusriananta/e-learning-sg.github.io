@@ -69,16 +69,19 @@ class kuesioner extends CI_Controller{
 		
 	}
 
-	public function isi()
+	public function isi($id_)
 	{
+
+		// echo $id_ujian;
+		// exit();
 		$this->akses_mahasiswa();
 		// print_r($_POST);
 		// print_r($_GET);
-		$id_tes = $_GET['id'];
-		$id_tes = $this->encryption->decrypt($id_tes);
+		// $id_ = $_GET['id'];
+		// $id_ = $this->encryption->decrypt($id_);
 		
 
-		$h_ujian = $this->db->get_where('h_ujian', ['id' => $id_tes])->row_array();
+		$h_ujian = $this->db->get_where('h_ujian', ['id' => $id_])->row_array();
 
 		$id_ujian = $h_ujian['ujian_id'];
 		
@@ -90,7 +93,7 @@ class kuesioner extends CI_Controller{
 			'subjudul'=> 'Isi Kuesioner!',
 		];
 
-		$data['pertanyaan'] = $this->db->get_where('p_kuesioner', ['id_kegiatan' => $id_ujian])->result_array();
+		$data['pertanyaan'] = $this->db->get_where('p_kuesioner', ['id_kegiatan' => $id_])->result_array();
 
 		if ($this->input->post('saran')==NULL) {
 			$this->load->view('_templates/dashboard/_header.php', $data);
@@ -137,7 +140,7 @@ class kuesioner extends CI_Controller{
         $saran = $this->input->post('saran',TRUE);
         $this->ujian->aksiKegiatan($pers_no, $date, $kuesioner,$opsi,$saran);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil dikirim</div>');
-		redirect('ujian/list');
+		redirect('kuesioner/listkuesioner');
 	}
 
 	public function kegiatanDetail($id)
@@ -164,14 +167,16 @@ class kuesioner extends CI_Controller{
 
 	public function listkuesioner(){
 			$this->akses_mahasiswa();
+			$list_kues = $this->db->get('m_ujian')->result_array();
 
 			$data = [
+
 				'user' => $this->ion_auth->user()->row(),
         'judul'  => 'Kuesioner',
         'subjudul'=> 'List Kuesioner',
+				'mhs' 		=> $list_kues
+
 			];
-
-
 
 			$this->load->view('_templates/dashboard/_header.php', $data);
 			$this->load->view('kuesioner/listkuesioner', $data);

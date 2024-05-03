@@ -46,7 +46,7 @@ class Ujian_model extends CI_Model {
     {
         $this->db->select('COUNT(id_soal) as jml_soal');
         $this->db->from('tb_soal');
-        $this->db->where('dosen_id', $dosen);
+        $this->db->where('dosen_id', $dosen); 
         return $this->db->get()->row();
     }
 
