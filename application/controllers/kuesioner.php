@@ -46,7 +46,7 @@ class kuesioner extends CI_Controller{
 					'kegiatan'		=> $key['nama_ujian'],
 					'tgl_mulai'		=> $key['tgl_mulai'],
 					'tgl_akhir'		=> $key['terlambat'],
-					'id_kuesioner'	=> $key['id_ujian'],
+					'id_ujian'	=> $key['id_ujian'],
 					'nilai'			=> $nilai['nilai']
 				);
 		}
@@ -72,18 +72,8 @@ class kuesioner extends CI_Controller{
 	public function isi($id_)
 	{
 
-		// echo $id_ujian;
-		// exit();
 		$this->akses_mahasiswa();
-		// print_r($_POST);
-		// print_r($_GET);
-		// $id_ = $_GET['id'];
-		// $id_ = $this->encryption->decrypt($id_);
-		
-
-		$h_ujian = $this->db->get_where('h_ujian', ['id' => $id_])->row_array();
-
-		$id_ujian = $h_ujian['ujian_id'];
+		// $h_ujian = $this->db->get_where('h_ujian', ['id' => $id_])->row_array();
 		
 
 		$user = $this->ion_auth->user()->row();
@@ -157,7 +147,7 @@ class kuesioner extends CI_Controller{
 		$data['baik'] = $this->ujian->getBaik($id);
 		$data['cukup'] = $this->ujian->getCukup($id);
 		$data['kurang'] = $this->ujian->getKurang($id);
-		$data['saran'] = $this->db->get_where('s_kegiatan', ['id_kuesioner'=>$id])->result_array();
+		$data['saran'] = $this->db->get_where('s_kegiatan', ['id_ujian'=>$id])->result_array();
 		$data['kegiatan'] = $this->db->get_where('m_ujian', ['id_ujian'=>$id])->row_array();
 		
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -167,19 +157,33 @@ class kuesioner extends CI_Controller{
 
 	public function listkuesioner(){
 			$this->akses_mahasiswa();
-			$list_kues = $this->db->get('m_ujian')->result_array();
+			$list_kues = $this->ujian->getListkuesioner();
+
+			foreach ($list_kues as &$item) {
+			$item['id_ujian'];
+			}
+			// print_r($list_kues);
+			// exit();
+
+			$user = $this->ion_auth->user()->row();
 
 			$data = [
-
-				'user' => $this->ion_auth->user()->row(),
+				'user' => $user,
         'judul'  => 'Kuesioner',
         'subjudul'=> 'List Kuesioner',
-				'mhs' 		=> $list_kues
-
+				'mhs' 		=> $list_kues,
 			];
 
 			$this->load->view('_templates/dashboard/_header.php', $data);
 			$this->load->view('kuesioner/listkuesioner', $data);
 			$this->load->view('_templates/dashboard/_footer.php');
+	}
+
+	public function filterkuesioner ($id_user){
+
+		$id_user = $this->ion_auth->user;
+
+		$this->ujian->kuesionerhasil($id_user);
+
 	}
 }

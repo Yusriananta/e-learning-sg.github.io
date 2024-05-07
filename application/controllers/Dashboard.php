@@ -19,25 +19,29 @@ class Dashboard extends CI_Controller {
 				'box' 		=> 'light-blue',
 				'total' 	=> $this->dashboard->total('jurusan'),
 				'title'		=> 'Tipe Pegawai',
-				'icon'		=> 'graduation-cap'
+				'icon'		=> 'graduation-cap',
+				'url'     => 'Jurusan'// URL menuju halaman peserta
 			],
 			[
 				'box' 		=> 'olive',
 				'total' 	=> $this->dashboard->total('kelas'),
 				'title'		=> 'Organisasi Unit',
-				'icon'		=> 'building-o'
+				'icon'		=> 'building-o',
+				'url'     => 'Matkul'
 			],
 			[
 				'box' 		=> 'yellow-active',
 				'total' 	=> $this->dashboard->total('dosen'),
 				'title'		=> 'Atasan',
-				'icon'		=> 'user-secret'
+				'icon'		=> 'user-secret',
+				'url'     => 'Dosen'
 			],
 			[
 				'box' 		=> 'red',
 				'total' 	=> $this->dashboard->total('mahasiswa'),
 				'title'		=> 'Peserta',
-				'icon'		=> 'user'
+				'icon'		=> 'user',
+				'url'     => 'mahasiswa'
 			],
 		];
 		$info_box = json_decode(json_encode($box), FALSE);

@@ -7,7 +7,7 @@
 			<footer class="main-footer">
 				<!-- To the right -->
 				<div class="pull-right hidden-xs">
-					E-Learning SG v1.0
+					Digital Library SG v1.0
 				</div>
 				<!-- Default to the left -->
 				<strong>Copyright &copy; 2024. By <a href="https://semenindonesia.sharepoint.com/sites/HCSite">Semen Gresik Human Capital</a>. </strong> All rights reserved

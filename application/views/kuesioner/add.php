@@ -102,7 +102,7 @@
                
               </td>
               <td>
-              <a href="<?php base_url();?>kuesioner/kegiatanDetail/<?php echo $key['id_kuesioner'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle"></i> Detail & saran</a>
+              <a href="<?php base_url();?>kuesioner/kegiatanDetail/<?php echo $key['id_ujian'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle"></i> Detail & saran</a>
               </td>
             <?php endforeach;?>
             </tr>

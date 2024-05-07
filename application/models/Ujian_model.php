@@ -219,7 +219,7 @@ class Ujian_model extends CI_Model {
             $data = [
                 "pers_no"       => $pers_no,
                 "tanggal"       => $date,
-                "id_kuesioner"  => $kuesioner
+                "id_ujian"  => $kuesioner
             ];
     
             $this->db->insert('a_kegiatan', $data);
@@ -228,7 +228,7 @@ class Ujian_model extends CI_Model {
             $result = array();
                 foreach($opsi AS $key => $val){
                      $result[] = array(
-                      'id_kuesioner'     => $kuesioner,
+                      'id_ujian'     => $kuesioner,
                       'id_aksi'          => $package_id,
                       'soal_no'          => $key,
                       'id_opsi'          => $_POST['opsi'][$key]
@@ -241,7 +241,7 @@ class Ujian_model extends CI_Model {
                 $value = [
                     "pers_no"       => $pers_no,
                     "tanggal"       => $date,
-                    "id_kuesioner"  => $kuesioner,
+                    "id_ujian"  => $kuesioner,
                     "saran"         => $saran
                 ];
 
@@ -254,8 +254,8 @@ class Ujian_model extends CI_Model {
     public function getSBaik($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 4 AND id_kuesioner = $id) as Sbaik, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 4 AND id_ujian = $id) as Sbaik, 
                 ROUND((SELECT Sbaik/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -264,8 +264,8 @@ class Ujian_model extends CI_Model {
     public function getBaik($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 3 AND id_kuesioner = $id) as baik, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 3 AND id_ujian = $id) as baik, 
                 ROUND((SELECT baik/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -274,8 +274,8 @@ class Ujian_model extends CI_Model {
     public function getCukup($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 2 AND id_kuesioner = $id) as cukup, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 2 AND id_ujian = $id) as cukup, 
                 ROUND((SELECT cukup/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -284,8 +284,8 @@ class Ujian_model extends CI_Model {
     public function getKurang($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 1 AND id_kuesioner = $id) as kurang, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 1 AND id_ujian = $id) as kurang, 
                 ROUND((SELECT kurang/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -293,8 +293,31 @@ class Ujian_model extends CI_Model {
 
     public function Nkuesioner($id)
     {
-        $query = "SELECT ROUND((SELECT AVG(id_opsi) FROM k_kegiatan WHERE id_kuesioner = $id),0) as nilai";
+        $query = "SELECT ROUND((SELECT AVG(id_opsi) FROM k_kegiatan WHERE id_ujian = $id),0) as nilai";
 
         return $this->db->query($query)->row_array();
+    }
+
+    public function kuesionerhasil($id_){
+        // $id_ = $_POST['id_user'];
+
+        
+        $query = "SELECT * FROM m_ujian
+        WHERE EXISTS (
+            SELECT 1
+            FROM s_kegiatan
+            WHERE s_kegiatan.id_ujian = m_ujian.id_ujian
+            AND s_kegiatan.id_user = $id_
+        );";
+
+        return $this->db->query($query)->row_array();
+    }
+
+    public function getListkuesioner(){
+      $query = "SELECT a.id_ujian, a.nama_ujian
+      FROM m_ujian a
+      LEFT JOIN s_kegiatan b ON a.id_ujian = b.id_ujian
+      WHERE b.saran IS NULL; ";
+      return $this->db->query($query)->result_array();
     }
 }
