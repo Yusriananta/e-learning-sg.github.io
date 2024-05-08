@@ -156,16 +156,24 @@ class kuesioner extends CI_Controller{
 	}
 
 	public function listkuesioner(){
+		
 			$this->akses_mahasiswa();
-			$list_kues = $this->ujian->getListkuesioner();
 
-			foreach ($list_kues as &$item) {
-			$item['id_ujian'];
-			}
+			// foreach ($list_kues as &$item) {
+			// $item['id_ujian'];
+			// }
 			// print_r($list_kues);
 			// exit();
 
 			$user = $this->ion_auth->user()->row();
+			$nopeg = $user->username;
+			
+			$getmhsid = $this->db->get_where('mahasiswa',array('nim'=>$nopeg))->result_array();
+			$id_mahasiswa=$getmhsid['0']['id_mahasiswa'];
+
+			$list_kues = $this->ujian->getListkuesioner($id_mahasiswa);
+
+
 
 			$data = [
 				'user' => $user,

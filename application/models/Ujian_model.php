@@ -313,11 +313,13 @@ class Ujian_model extends CI_Model {
         return $this->db->query($query)->row_array();
     }
 
-    public function getListkuesioner(){
-      $query = "SELECT a.id_ujian, a.nama_ujian
-      FROM m_ujian a
-      LEFT JOIN s_kegiatan b ON a.id_ujian = b.id_ujian
-      WHERE b.saran IS NULL; ";
+    public function getListkuesioner($id_mahasiswa) {
+      // ambil id dari session user, select tabel mahasiswa berdasarkan id tersebut, sehingga mendapat kelas_id
+      // WHERE b.saran is NULL AND 
+      $query = "SELECT b.id_ujian,b.nama_ujian FROM h_ujian a 
+      left join m_ujian b on a.ujian_id=b.id_ujian
+      left join s_kegiatan c on b.id_ujian=c.id_ujian
+      where c.saran is null and a.mahasiswa_id='$id_mahasiswa';";
       return $this->db->query($query)->result_array();
     }
 }
