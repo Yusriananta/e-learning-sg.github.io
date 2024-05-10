@@ -194,4 +194,9 @@ class kuesioner extends CI_Controller{
 		$this->ujian->kuesionerhasil($id_user);
 
 	}
+
+// ------------- KUESIONER Level 2 -----------------------
+
+
+
 }
