@@ -1,6 +1,8 @@
-<?php if (!empty($mhs)): ?>
-    <div class="box">
-        <div class="box-header with-border">
+<?php if (!empty($message)): ?>
+    <div class="alert alert-info"><?= $message; ?></div>
+<?php elseif (!empty($mhs)): ?>
+    <div class="box box-primary">
+        <div class="box-header box-danger with-border">
             <h3 class="box-title"><?= $subjudul ?></h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -14,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <?= $this->session->flashdata('message');?>
+        <?= $this->session->flashdata('message'); ?>
         <div class="table-responsive px-4 pb-3" style="border: 0">
             <table id="mhs" class="w-100 table table-striped table-bordered table-hover">
                 <thead>
@@ -27,15 +29,15 @@
                 <tbody>
                     <?php $no = 1; foreach ($mhs as $s): ?>
                         <tr>
-                            <td><?= $no++;?></td>
-                            <td><?= $s['nama_ujian'];?></td>
+                            <td><?= $no++; ?></td>
+                            <td><?= $s['nama_ujian']; ?></td>
                             <td>
                                 <a href="<?= base_url('kuesioner/isi/') . $s['id_ujian']; ?>" class="btn btn-xs btn-primary">
                                     <i class="fa fa-sticky-note"></i> Detail
                                 </a>
                             </td>
                         </tr>
-                    <?php endforeach;?>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

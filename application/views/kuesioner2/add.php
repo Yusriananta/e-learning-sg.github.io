@@ -18,6 +18,7 @@
           <thead>
             <tr>
               <th scope="col" width="50px">No</th>
+              <th scope="col" width="100px">Atasan</th>
               <th scope="col" width="250px">Kegiatan</th>
               <th scope="col">Pertanyaan</th>
               <th scope="col">Aksi</th>
@@ -28,11 +29,12 @@
           <?php foreach ($pertanyaan as $key):?>
             <tr>
               <th><?php echo $no++;?></th>
+              <td><?php echo $key['nama_dosen'];?></td>
               <th><?php echo $key['nama_ujian'];?></th>
               <td><?php echo $key['pertanyaan'];?></td>
               <td>
               <!-- <a href="" class="btn btn-xs btn-success" data-toggle="modal" data-target="#edit<?=$key['id']?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> -->
-              <a href="<?php base_url();?>kuesioner/delete/<?php echo $key['id'];?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin ingin menghapus Pertanyaan?');"><i class="fa fa-trash"></i></a>
+              <a href="<?php base_url();?>kuesioner2/delete/<?php echo $key['id'];?>" class="btn btn-xs btn-danger" onclick="return confirm('Yakin ingin menghapus Pertanyaan?');"><i class="fa fa-trash"></i></a>
               </td>
             </tr>
             <?php endforeach;?> 
@@ -42,7 +44,7 @@
 </div>
 
 
-<div class="box box-primary box-solid">
+<div class="box box-danger box-solid">
     <div class="box-header">
         <h3 class="box-title">
             Hasil Kuesioner
@@ -57,7 +59,7 @@
           <thead>
             <tr>
               <th scope="col" width="50px">No</th>
-              <th scope="col" width="250px">Nama Kegiatan</th>
+              <th scope="col" width="250px">Nama Ujian</th>
               <th scope="col">Tanggal</th>
               <th scope="col">Penilaian</th>
               <th scope="col" width="150px">Aksi</th>
@@ -68,7 +70,7 @@
           <?php foreach ($nilai as $key):?>
             <tr>
               <th><?php echo $no++;?></th>
-              <td><?php echo $key['kegiatan'];?></td>
+              <td><?php echo $key['namaujian'];?></td>
               <td>
                   <?php $date=date_create($key['tgl_mulai']); 
                   echo date_format($date,"j F Y, g:i a");
@@ -102,7 +104,7 @@
                
               </td>
               <td>
-              <a href="<?php base_url();?>kuesioner/kegiatanDetail/<?php echo $key['id_ujian'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle"></i> Detail & saran</a>
+              <a href="<?php base_url();?>kuesioner2/kegiatanDetail/<?php echo $key['id_ujian'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle"></i> Detail & saran</a>
               </td>
             <?php endforeach;?>
             </tr>
@@ -125,7 +127,7 @@
         </button>
       </div>
       <div class="modal-body">
-       <form action="<?php echo base_url('kuesioner');?>" method="post">
+       <form action="<?php echo base_url('kuesioner2');?>" method="post">
           <div class="form-group">
             <label for="pertanyaan">Atasan</label>
             <select class="form-control" id="atasan" name="atasan" required>
@@ -136,10 +138,10 @@
             </select> 
           </div>
            <div class="form-group">
-            <label for="pertanyaan">Kegiatan</label>
+            <label for="pertanyaan">Kegiatan Ujian</label>
             <select class="form-control" id="kegiatan" name="kegiatan" required>
-              <option value="">Pilih Kegiatan</option>
-              <?php foreach ($kegiatan as $key):?>
+              <option value="">Pilih Ujian</option>
+              <?php foreach ($namaujian as $key):?>
               <option value="<?php echo $key['id_ujian'];?>"><?php echo $key['nama_ujian'];?></option>
               <?php endforeach;?>
             </select> 
