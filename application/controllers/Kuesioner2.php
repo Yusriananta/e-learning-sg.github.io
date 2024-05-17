@@ -91,12 +91,13 @@ class kuesioner2 extends CI_Controller {
     {
       $user = $this->ion_auth->user()->row_array();
   
-      $pers_no = $user['username'];
+      $no_user = $user['username'];
           $date = date('Y-m-d H:i:s');
-          $kuesioner = $this->input->post('id_kegiatan',TRUE);
+          $kuesioner = $this->input->post('id_ujian',TRUE);
+          // $id_mhs_atasan = $this->input->post('id_mhs_atasan',TRUE);
           $opsi = $this->input->post('opsi',TRUE);
           $saran = $this->input->post('saran',TRUE);
-          $this->ujian->aksiKegiatan($pers_no, $date, $kuesioner,$opsi,$saran);
+          $this->kuesioner->aksiKegiatan($no_user, $date, $kuesioner, $opsi,$saran); 
           $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil dikirim</div>');
       redirect('kuesioner2/listkuesioner');
     }
@@ -123,50 +124,85 @@ class kuesioner2 extends CI_Controller {
       $this->load->view('_templates/dashboard/_footer.php');
     }
 
-    public function listkuesioner()
+    public function isi($id_)
     {
-        $this->akses_mahasiswa();
-        $user = $this->ion_auth->user()->row();
-        $nopeg = $user->username;
-    
-        $getmhsid = $this->db->get_where('mahasiswa', array('nim' => $nopeg))->result_array();
-        $id_mahasiswa = $getmhsid['0']['id_mahasiswa'];
-    
-        // Periksa apakah pengguna telah menyelesaikan Kuesioner 1
-        $is_completed = $this->db->get_where('user_kuesioner_status', [
-            'user_id' => $user->id,
-            'kuesioner_completed' => TRUE
-        ])->row();
-    
-        if (!$is_completed) {
-            $data = [
-                'user' => $user,
-                'judul' => 'Kuesioner Level 2',
-                'subjudul' => 'List Kuesioner',
-                'mhs' => [],
-                'message' => 'Silakan selesaikan Kuesioner 1 terlebih dahulu.'
-            ];
-    
-            $this->load->view('_templates/dashboard/_header.php', $data);
-            $this->load->view('kuesioner2/listkuesioner', $data);
-            $this->load->view('_templates/dashboard/_footer.php');
-            return;
-        }
-    
-        $list_kues = $this->kuesioner->getListkuesioner($id_mahasiswa);
-    
-        $data = [
-            'user' => $user,
-            'judul' => 'Kuesioner Level 2',
-            'subjudul' => 'List Kuesioner',
-            'mhs' => $list_kues,
-            'message' => ''
-        ];
-    
+  
+      $this->akses_mahasiswa();
+      // $h_ujian = $this->db->get_where('h_ujian', ['id' => $id_])->row_array();
+      
+  
+      $user = $this->ion_auth->user()->row();
+      $data = [
+        'user' => $user,
+        'judul'	=> 'Kuesioner',
+        'subjudul'=> 'Isi Kuesioner!',
+      ];
+  
+      $data['pertanyaan'] = $this->db->get_where('p_kuesioner2', ['id_ujian' => $id_])->result_array();
+  
+      if ($this->input->post('saran')==NULL) {
         $this->load->view('_templates/dashboard/_header.php', $data);
-        $this->load->view('kuesioner2/listkuesioner', $data);
+        $this->load->view('kuesioner2/isi', $data);
         $this->load->view('_templates/dashboard/_footer.php');
+      }else{
+  
+        $cek = $this->input->post('sbaik', true);
+        print_r($cek);exit();
+        $data = [ 'id_pegawai'=> 1234,
+            'email'=> 1,
+            'nama'=> 1,
+            'sbaik' => $this->input->post('sbaik', true),
+            'baik' => $this->input->post('baik', true),
+            'biasa' => $this->input->post('biasa', true),
+            'buruk' => $this->input->post('buruk', true),
+            'sburuk' => $this->input->post('sburuk', true),
+            'saran' => $this->input->post('saran', true),
+            'tanggal' => date('Y-m-d')
+        ];
+        $this->db->insert('h_kuesioner', $data);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil di input</div>');
+        redirect('kuesioner2');
+      }
+  
     }
+
+    public function listkuesioner() {
+      $this->akses_mahasiswa();
+      $user = $this->ion_auth->user()->row();
+      $nopeg = $user->username;
+
+      $getmhsid = $this->db->get_where('mahasiswa', array('nim' => $nopeg))->result_array();
+      $id_mahasiswa = $getmhsid[0]['id_mahasiswa'];
+
+      // Cek apakah mahasiswa telah menyelesaikan kuesioner level 1
+      $list_kues = $this->kuesioner->getListkuesioner($id_mahasiswa);
+
+      $hilang = $this->kuesioner->getHilang($id_mahasiswa);
+
+          // Filter kuesioner yang belum dikerjakan
+      $mhs = array_filter($list_kues, function($kues) use ($hilang) {
+        return in_array($kues['id_ujian'], array_column($hilang, 'id_ujian'));
+      });
+
+      // print_r($mhs);
+      // exit();
+
+      $data = [
+          'user' => $user,
+          'judul' => 'Kuesioner Level 2',
+          'subjudul' => 'List Kuesioner',
+          'mhs' => $mhs,
+          'hilang' => $hilang,
+          'message' => empty($mhs) ? 'Tidak ada data ujian yang tersedia.' : ''
+      ];
+
+      // print_r($data);
+      // exit();
+
+      $this->load->view('_templates/dashboard/_header.php', $data);
+      $this->load->view('kuesioner2/listkuesioner', $data);
+      $this->load->view('_templates/dashboard/_footer.php');
+  }
 
 
 }

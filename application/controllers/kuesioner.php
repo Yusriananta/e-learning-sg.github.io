@@ -62,6 +62,13 @@ class kuesioner extends CI_Controller{
 					'pertanyaan' => $this->input->post('pertanyaan', true)];
 
 			$this->db->insert('p_kuesioner', $data);
+			
+        // Tandai kuesioner sebagai selesai
+        $user_id = $this->ion_auth->user()->row()->id;
+        $this->db->replace('user_kuesioner_status', [
+            'user_id' => $user_id,
+            'kuesioner_completed' => TRUE
+        ]);
 
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil di input</div>');
 			redirect('kuesioner');
@@ -129,8 +136,9 @@ class kuesioner extends CI_Controller{
         $opsi = $this->input->post('opsi',TRUE);
         $saran = $this->input->post('saran',TRUE);
         $this->ujian->aksiKegiatan($pers_no, $date, $kuesioner,$opsi,$saran);
+
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil dikirim</div>');
-		redirect('kuesioner/listkuesioner');
+		redirect('kuesioner2/listkuesioner');
 	}
 
 	public function kegiatanDetail($id)
@@ -158,23 +166,16 @@ class kuesioner extends CI_Controller{
 	public function listkuesioner(){
 		
 			$this->akses_mahasiswa();
-
-			// foreach ($list_kues as &$item) {
-			// $item['id_ujian'];
-			// }
-			// print_r($list_kues);
-			// exit();
-
 			$user = $this->ion_auth->user()->row();
 			$nopeg = $user->username;
 			
 			$getmhsid = $this->db->get_where('mahasiswa',array('nim'=>$nopeg))->result_array();
 			$id_mahasiswa=$getmhsid['0']['id_mahasiswa'];
 
+			    // Cek apakah mahasiswa sudah mengerjakan kuesioner
+
 			$list_kues = $this->ujian->getListkuesioner($id_mahasiswa);
-
-
-
+			
 			$data = [
 				'user' => $user,
         'judul'  => 'Kuesioner',

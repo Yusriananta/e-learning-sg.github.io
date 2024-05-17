@@ -25,12 +25,12 @@
             <tr>
               <th scope="row"><?= $i ?></th>
               <td><?php echo $soal['pertanyaan'];?></td>
-              <form class="ml-2" action="<?php echo site_url('Kuesioner/aksiKegiatan');?>" method="post" novalidate="novalidate">
+              <form class="ml-2" action="<?php echo site_url('kuesioner2/aksiKegiatan');?>" method="post" novalidate="novalidate">
               <td class="text-center"><input type="radio" id="exampleCustomRadio1<?=$i?>" name="opsi[<?=$i?>]" value="4" class="custom-control-input" required></td>
               <td class="text-center"><input type="radio" id="exampleCustomRadio1<?=$i?>" name="opsi[<?=$i?>]" value="3" class="custom-control-input" required></td>
               <td class="text-center"><input type="radio" id="exampleCustomRadio1<?=$i?>" name="opsi[<?=$i?>]" value="2" class="custom-control-input" required></td>
               <td class="text-center"><input type="radio" id="exampleCustomRadio1<?=$i?>" name="opsi[<?=$i?>]" value="1" class="custom-control-input" required></td>
-              <input type="hidden" id="id_kegiatan" name="id_kegiatan" value="<?php echo $soal['id_kegiatan'];?>">
+              <input type="hidden" id="id_ujian" name="id_ujian" value="<?php echo $soal['id_ujian'];?>">
             </tr> 
         <?php $i++;} ?> 
           </tbody>

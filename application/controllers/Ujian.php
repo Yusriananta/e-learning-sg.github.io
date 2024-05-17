@@ -59,7 +59,7 @@ class Ujian extends CI_Controller {
 
     public function master()
 	{
-		 
+		 		// $this->akses_admin();
         $this->akses_dosen();
         $user = $this->ion_auth->user()->row();
         $data = [

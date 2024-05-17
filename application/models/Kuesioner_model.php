@@ -34,7 +34,7 @@ return $this->db->query($query)->result_array();
       return $this->db->query($query)->row_array();
   }
 
-  public function aksiKuesioner($no_user, $date, $id_mhs_atasan, $kuesioner, $opsi,$saran)
+  public function aksiKegiatan($no_user, $date, $kuesioner, $opsi,$saran)
   {
       $this->db->trans_start();
           //INSERT TO PACKAGE
@@ -42,7 +42,6 @@ return $this->db->query($query)->result_array();
               "no_user"       => $no_user,
               "tanggal"       => $date,
               "id_ujian"  => $kuesioner,
-              "id_mhs_atasan" => $id_mhs_atasan
           ];
 
           $this->db->insert('log_kuesioner2', $data);
@@ -63,7 +62,6 @@ return $this->db->query($query)->result_array();
           if(!empty($saran)){
               $value = [
                   "no_user"       => $no_user,
-                  "id_mhs_atasan" => $id_mhs_atasan,
                   "tanggal"       => $date,
                   "id_ujian"  => $kuesioner,
                   "saran"         => $saran
@@ -118,12 +116,25 @@ return $this->db->query($query)->result_array();
     public function getListkuesioner($id_mahasiswa) {
     // ambil id dari session user, select tabel mahasiswa berdasarkan id tersebut, sehingga mendapat kelas_id
     // WHERE b.saran is NULL AND 
-    $query = "SELECT b.id_ujian,b.nama_ujian FROM h_ujian a 
+    $query = "SELECT * FROM h_ujian a left join m_ujian b on a.ujian_id=b.id_ujian
+    left join s_kegiatan c on b.id_ujian=c.id_ujian
+    where c.saran is not null and a.mahasiswa_id= $id_mahasiswa";
+    return $this->db->query($query)->result_array();
+  }
+
+  public function getHilang($id_mahasiswa) {
+    
+    $query ="SELECT b.id_ujian,b.nama_ujian FROM h_ujian a 
     left join m_ujian b on a.ujian_id=b.id_ujian
     left join saran_kuesioner2 c on b.id_ujian=c.id_ujian
     where c.saran is null and a.mahasiswa_id='$id_mahasiswa';";
     return $this->db->query($query)->result_array();
-  }
+    
+    
+}
+
+
+
 
 }
 

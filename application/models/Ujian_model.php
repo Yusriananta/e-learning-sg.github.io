@@ -322,4 +322,6 @@ class Ujian_model extends CI_Model {
       where c.saran is null and a.mahasiswa_id='$id_mahasiswa';";
       return $this->db->query($query)->result_array();
     }
+
+
 }

@@ -1,8 +1,8 @@
 <?php if (!empty($message)): ?>
-    <div class="alert alert-info"><?= $message; ?></div>
+    <div class="alert alert-primary"><?= $message; ?></div>
 <?php elseif (!empty($mhs)): ?>
     <div class="box box-primary">
-        <div class="box-header box-danger with-border">
+        <div class="box-header box-primary with-border">
             <h3 class="box-title"><?= $subjudul ?></h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -33,7 +33,7 @@
                             <td><?= $s['nama_ujian']; ?></td>
                             <td>
                                 <a href="<?= base_url('kuesioner/isi/') . $s['id_ujian']; ?>" class="btn btn-xs btn-primary">
-                                    <i class="fa fa-sticky-note"></i> Detail
+                                    <i class="fa fa-sticky-note"></i> Isi Kuesioner
                                 </a>
                             </td>
                         </tr>
@@ -45,7 +45,3 @@
 <?php else: ?>
     <p>Tidak ada data ujian yang tersedia.</p>
 <?php endif; ?>
-
-<script>
-    
-</script>
