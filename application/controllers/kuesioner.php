@@ -62,17 +62,13 @@ class kuesioner extends CI_Controller{
 					'pertanyaan' => $this->input->post('pertanyaan', true)];
 
 			$this->db->insert('p_kuesioner', $data);
-			
-        // Tandai kuesioner sebagai selesai
-        $user_id = $this->ion_auth->user()->row()->id;
-        $this->db->replace('user_kuesioner_status', [
-            'user_id' => $user_id,
-            'kuesioner_completed' => TRUE
-        ]);
 
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil di input</div>');
 			redirect('kuesioner');
 		}
+
+		// print_r($data);
+		// exit();
 		
 	}
 
@@ -171,10 +167,12 @@ class kuesioner extends CI_Controller{
 			
 			$getmhsid = $this->db->get_where('mahasiswa',array('nim'=>$nopeg))->result_array();
 			$id_mahasiswa=$getmhsid['0']['id_mahasiswa'];
-
 			    // Cek apakah mahasiswa sudah mengerjakan kuesioner
 
 			$list_kues = $this->ujian->getListkuesioner($id_mahasiswa);
+
+			// print_r($list_kues);
+			// exit();
 			
 			$data = [
 				'user' => $user,
@@ -188,13 +186,7 @@ class kuesioner extends CI_Controller{
 			$this->load->view('_templates/dashboard/_footer.php');
 	}
 
-	public function filterkuesioner ($id_user){
 
-		$id_user = $this->ion_auth->user;
-
-		$this->ujian->kuesionerhasil($id_user);
-
-	}
 
 // ------------- KUESIONER Level 2 -----------------------
 

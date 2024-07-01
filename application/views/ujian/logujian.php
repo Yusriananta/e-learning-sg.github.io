@@ -25,7 +25,6 @@
 
     
     <div class="col-sm-12">
-    <!-- <?=form_open('', array('id'=>'ujian'), array('id'=> $id_tes));?> -->
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title"><span class="badge bg-blue">Soal <span id="soalke"></span> </span></h3>

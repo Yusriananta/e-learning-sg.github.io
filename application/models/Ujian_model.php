@@ -169,8 +169,12 @@ class Ujian_model extends CI_Model {
     }
 
     public function getLogujian($ujian_id){
-        $query = "SELECT hs_h_ujian.*, tb_soal.soal FROM tb_soal 
-        LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal WHERE ujian_id='$ujian_id' ORDER BY hs_h_ujian.id_soal";
+        $query = "SELECT hs_h_ujian.*, tb_soal.soal, mahasiswa.id_mahasiswa 
+        FROM tb_soal 
+        LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal 
+        LEFT JOIN mahasiswa ON hs_h_ujian.mahasiswa_id = mahasiswa.id_mahasiswa 
+        WHERE hs_h_ujian.ujian_id = '$ujian_id'
+        ORDER BY hs_h_ujian.id_soal;";
         $result = $this->db->query($query)->result_array();
         $a=0;
         foreach ($result as $row){
@@ -184,7 +188,7 @@ class Ujian_model extends CI_Model {
         $newReturn[]=array(
             'id'=>$row['id'],
             'ujian_id'=>$row['ujian_id'],
-            'mahasiswa_id'=>$row['mahasiswa_id'],
+            'id_mahasiswa'=>$row['id_mahasiswa'],
             'id_soal'=>$row['id_soal'],
             'kunci_jawaban'=>$row['kunci_jawaban'],
             'list_jawaban'=>$row['list_jawaban'],
@@ -201,6 +205,41 @@ class Ujian_model extends CI_Model {
     public function getLoghsujian(){
         return $this->db->get('h_ujian')->result_array();
     }
+
+    public function getLogSujian($ujian_id, $id_mahasiswa){
+      $query = "SELECT hs_h_ujian.*, tb_soal.soal, mahasiswa.id_mahasiswa 
+      FROM tb_soal 
+      LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal 
+      LEFT JOIN mahasiswa ON hs_h_ujian.mahasiswa_id = mahasiswa.id_mahasiswa 
+      WHERE hs_h_ujian.ujian_id = '$ujian_id' AND mahasiswa.id_mahasiswa = '$id_mahasiswa'
+      ORDER BY hs_h_ujian.id_soal;";
+      $result = $this->db->query($query)->result_array();
+      $a=0;
+      foreach ($result as $row){
+      //   if ($row['id_soal'] == $id_soal) {
+      //     $id_soal = $row['id_soal'];
+      // }
+      // print_r($result[$a]['id_soal']);
+      $jawabanDesc=$this->getDiscJwb($result[$a]['id_soal'],$result[$a]['list_jawaban']);
+      $field=$this->getDescJwb($row['list_jawaban']);
+
+      $newReturn[]=array(
+          'id'=>$row['id'],
+          'ujian_id'=>$row['ujian_id'],
+          'id_mahasiswa'=>$row['id_mahasiswa'],
+          'id_soal'=>$row['id_soal'],
+          'kunci_jawaban'=>$row['kunci_jawaban'],
+          'list_jawaban'=>$row['list_jawaban'],
+          'tanggal'=>$row['tanggal'],
+          'soal'=>$row['soal'],
+          'description'=>$jawabanDesc[0][$field]
+      );
+      $a++;
+    }
+
+      return $newReturn;
+  }
+
 
     public function getPertanyaan()
     {
@@ -227,12 +266,12 @@ class Ujian_model extends CI_Model {
             $package_id = $this->db->insert_id();
             $result = array();
                 foreach($opsi AS $key => $val){
-                     $result[] = array(
+                    $result[] = array(
                       'id_ujian'     => $kuesioner,
                       'id_aksi'          => $package_id,
                       'soal_no'          => $key,
                       'id_opsi'          => $_POST['opsi'][$key]
-                     );
+                    );
                 }      
             //MULTIPLE INSERT TO DETAIL TABLE
             $this->db->insert_batch('k_kegiatan', $result);
@@ -298,19 +337,9 @@ class Ujian_model extends CI_Model {
         return $this->db->query($query)->row_array();
     }
 
-    public function kuesionerhasil($id_){
-        // $id_ = $_POST['id_user'];
-
-        
-        $query = "SELECT * FROM m_ujian
-        WHERE EXISTS (
-            SELECT 1
-            FROM s_kegiatan
-            WHERE s_kegiatan.id_ujian = m_ujian.id_ujian
-            AND s_kegiatan.id_user = $id_
-        );";
-
-        return $this->db->query($query)->row_array();
+    public function kuesionerhasil($id_mahasiswa){
+      $query ="SELECT * FROM";
+      return $this->db->query($query)->row_array();
     }
 
     public function getListkuesioner($id_mahasiswa) {

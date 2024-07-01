@@ -455,6 +455,9 @@ class Ujian extends CI_Controller {
 		$data_tes = $this->db->get_where('h_ujian', ['id' => $id_tes])->row_array();
 		$ujian_id = $data_tes['ujian_id'];
 		$mhs	= $this->mhs;
+
+		// print_r($mhs);
+		// exit();
 		
 		// Get Jawaban
 		$list_jawaban = $this->ujian->getJawaban($id_tes);
@@ -505,13 +508,7 @@ class Ujian extends CI_Controller {
 			// exit();
 
 			$this->db->insert('hs_h_ujian', $hs_jawaban);
-			
-			
-			
-			
-			
-			
-	
+
 		}
 		
 		$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
@@ -533,8 +530,14 @@ class Ujian extends CI_Controller {
 
 public function logjawaban(){
 	$id_tes = $_GET['ujian_id'];
+	// $id_mhs = $_GET['id_mahasiswa'];
+	$mhs	= $this->mhs->id_mahasiswa;
+	// print_r($mhs);
+	// exit();
 
 	$dhistori = $this->ujian->getLogujian($id_tes);
+
+
 
 	$html = '';
 	$no = 1 ;
@@ -550,6 +553,8 @@ public function logjawaban(){
 			'judul'		=> 'Ujian',
 			'subjudul'	=> 'Hasil Ujian',
 	];
+	// print_r($data);
+	// exit();
 
 	$this->load->view('_templates/topnav/_header.php', $data);
 	$this->load->view('ujian/logujian');

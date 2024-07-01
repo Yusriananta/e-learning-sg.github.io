@@ -45,17 +45,10 @@ class Belajar_model extends CI_Model {
 
   public function getDelete($id){
     $get_where = $this->db->get_where('tb_video', array('id' => $id))->row_array();
-    // print_r($get_where);
-    // exit();
     $video = $get_where['video'];
     $thumbnail = $get_where['thumbnail'];
-    // print_r($video);
-    // exit();
- 
       unlink(FCPATH . './assets/dist/thumbnail/'.$thumbnail);
       unlink(FCPATH . './assets/dist/video/'.$video);
-    
-
     $this->db->where('id', $id);
     $this->db->delete('tb_video');
     

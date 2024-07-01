@@ -210,7 +210,7 @@ function selesai() {
       console.log(r);
       if (r.status) {
 
-        window.location.replace(base_url + "ujian/logjawaban?ujian_id=" + r.ujian_id);
+        window.location.replace(base_url + "ujian/logjawaban?ujian_id=" + r.ujian_id + "&id_mahasiswa=" + r.mahasiwa_id) ;
 
       }
     },
