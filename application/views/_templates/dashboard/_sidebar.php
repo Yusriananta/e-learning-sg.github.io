@@ -122,6 +122,20 @@
 				</a>
 			</li>
 			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
+			<li class="<?=$page==='kuesioner'?"active":""?>">
+				<a href="<?=base_url('kuesioner/listkuesioner')?>" rel="noopener noreferrer">
+				<i class="fa fa-list-ol"></i><span>Kuesioner</span>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
+			<li class="<?=$page==='kuesioner2'?"active":""?>">
+				<a href="<?=base_url('kuesioner2/listkuesioner')?>" rel="noopener noreferrer">
+				<i class="fa fa-list-ol"></i><span>Kuesioner Lv2</span>
+				</a>
+			</li>
+			<?php endif; ?>
 			<?php if( !$this->ion_auth->in_group('mahasiswa') ) : ?>
 			<li class="header">REPORTS</li>
 			<li class="<?=$page==='hasilujian'?"active":""?>">
@@ -136,6 +150,13 @@
 					</a>
 				</li>
 				<?php endif; ?>
+				<?php if($this->ion_auth->is_admin()) : ?>
+        <li class="<?=$page==='kuesioner2'?"active":""?>">
+            <a href="<?=base_url('kuesioner2')?>" rel="noopener noreferrer">
+                <i class="fa fa-list-ol"></i> <span>Kuesioner Lv2</span>
+            </a>
+        </li>
+    <?php endif; ?>
 			<?php endif; ?>
 			<?php if($this->ion_auth->is_admin()) : ?>
 			<li class="header">ADMINISTRATOR</li>

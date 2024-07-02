@@ -1,20 +1,20 @@
 <?php if( $this->ion_auth->is_admin() ) : ?>
 <div class="row">
-    <?php foreach($info_box as $info) : ?>
-    <div class="col-lg-3 col-xs-6">
-        <div class="small-box bg-<?=$info->box?>">
-        <div class="inner">
-            <h3><?=$info->total;?></h3>
-            <p><?=$info->title;?></p>
+    <?php foreach($info_box as $info): ?>
+        <div class="col-lg-3 col-xs-6">
+            <div class="small-box bg-<?= $info->box ?>">
+                <div class="inner">
+                    <h3><?= $info->total ?></h3>
+                    <p><?= $info->title ?></p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-<?= $info->icon ?>"></i>
+                </div>
+                <a href="<?= base_url($info->url) ?>" class="small-box-footer">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
         </div>
-        <div class="icon">
-            <i class="fa fa-<?=$info->icon?>"></i>
-        </div>
-        <a href="<?=base_url().strtolower($info->title);?>" class="small-box-footer">
-            More info <i class="fa fa-arrow-circle-right"></i>
-        </a>
-        </div>
-    </div>
     <?php endforeach; ?>
 </div>
 
@@ -62,7 +62,7 @@
                 <h3 class="box-title">Pemberitahuan</h3>
             </div>
             <div class="box-body">
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quidem in animi quibusdam nihil esse ratione, nulla sint enim natus, aut mollitia quas veniam, tempore quia!</p>
+                <p>Selamat datang di platform Digital Library Berikut adalah panduan singkat sebagai atasan untuk membantu memaksimalkan pengalaman belajar para karyawan:</p>
                 <ul class="pl-4">
                     <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur, culpa.</li>
                     <li>Provident dolores doloribus, fugit aperiam alias tempora saepe non omnis.</li>
@@ -117,13 +117,14 @@
                 <h3 class="box-title">Pemberitahuan</h3>
             </div>
             <div class="box-body">
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quidem in animi quibusdam nihil esse ratione, nulla sint enim natus, aut mollitia quas veniam, tempore quia!</p>
+                <p>Selamat datang di platform Digital Library Berikut adalah panduan singkat untuk membantu Anda memulai dan memaksimalkan pengalaman belajar Anda:</p>
                 <ul class="pl-4">
-                    <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur, culpa.</li>
-                    <li>Provident dolores doloribus, fugit aperiam alias tempora saepe non omnis.</li>
-                    <li>Doloribus sed eum et repellat distinctio a repudiandae quia voluptates.</li>
+                    <li>Masuk menggunakan email SIG dan password NIK 4 digit terakhir.</li>
+                    <li>Untuk mengerjakan soal bisa diakses di bagian Ujian.</li>
+                    <li>Dihalaman kuesioner 1 dan 2, pertanyaan kuesioner akan muncul jika pengguna selesai mengerjakan ujian.</li>
                     <li>Adipisci hic rerum illum odit possimus voluptatibus ad aliquid consequatur.</li>
-                    <li>Laudantium sapiente architecto excepturi beatae est minus, labore non libero.</li>
+                    <li>Kuesioner 2 dapat diakses jika pengguna selesai mengerjakan kuesioner 1.</li>
+                    <li>Untuk materi video pembelajaran bisa akses dihalaman belajar</li>
                 </ul>
             </div>
         </div>

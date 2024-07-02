@@ -43,6 +43,7 @@ class Belajar extends CI_Controller{
     }
 
 	public function index()
+	
     {
 
       $data = [
@@ -59,10 +60,13 @@ class Belajar extends CI_Controller{
 
 		public function detailvideo($id){
 
-			$tes = $this->belajar->getVideoById($id);
-			// print_r($tes);
-			// exit();
+			if ( !$this->ion_auth->is_admin() && !$this->ion_auth->in_group('dosen') ){
+				$this->belajar->getViews($id);
+			} 
+			// $this->belajar->getViews();
+			$tes = $this->belajar->getVideoById($id);		
 
+			
 			$data = [
 				'user' => $this->ion_auth->user()->row(),
 				'judul'	=> 'Pembelajaran',
@@ -251,12 +255,15 @@ class Belajar extends CI_Controller{
 			// $g_seacrh = $this->belajar->getSeacrh();
 			
 			print_r(json_encode($get_data));
-			
-
-
-		
 		}
 
+		public function views($id){
+        // Simpan jumlah views ke dalam database
+      $t_view = $this->belajar->getViews($id);
+			// print_r($t_view);
+			// exit();
+
+		}
 			
 
 

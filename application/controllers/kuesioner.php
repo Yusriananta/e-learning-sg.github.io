@@ -46,7 +46,7 @@ class kuesioner extends CI_Controller{
 					'kegiatan'		=> $key['nama_ujian'],
 					'tgl_mulai'		=> $key['tgl_mulai'],
 					'tgl_akhir'		=> $key['terlambat'],
-					'id_kuesioner'	=> $key['id_ujian'],
+					'id_ujian'	=> $key['id_ujian'],
 					'nilai'			=> $nilai['nilai']
 				);
 		}
@@ -66,21 +66,17 @@ class kuesioner extends CI_Controller{
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil di input</div>');
 			redirect('kuesioner');
 		}
+
+		// print_r($data);
+		// exit();
 		
 	}
 
-	public function isi()
+	public function isi($id_)
 	{
+
 		$this->akses_mahasiswa();
-		// print_r($_POST);
-		// print_r($_GET);
-		$id_tes = $_GET['id'];
-		$id_tes = $this->encryption->decrypt($id_tes);
-		
-
-		$h_ujian = $this->db->get_where('h_ujian', ['id' => $id_tes])->row_array();
-
-		$id_ujian = $h_ujian['ujian_id'];
+		// $h_ujian = $this->db->get_where('h_ujian', ['id' => $id_])->row_array();
 		
 
 		$user = $this->ion_auth->user()->row();
@@ -90,7 +86,7 @@ class kuesioner extends CI_Controller{
 			'subjudul'=> 'Isi Kuesioner!',
 		];
 
-		$data['pertanyaan'] = $this->db->get_where('p_kuesioner', ['id_kegiatan' => $id_ujian])->result_array();
+		$data['pertanyaan'] = $this->db->get_where('p_kuesioner', ['id_kegiatan' => $id_])->result_array();
 
 		if ($this->input->post('saran')==NULL) {
 			$this->load->view('_templates/dashboard/_header.php', $data);
@@ -136,8 +132,9 @@ class kuesioner extends CI_Controller{
         $opsi = $this->input->post('opsi',TRUE);
         $saran = $this->input->post('saran',TRUE);
         $this->ujian->aksiKegiatan($pers_no, $date, $kuesioner,$opsi,$saran);
+
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kuesioner berhasil dikirim</div>');
-		redirect('ujian/list');
+		redirect('kuesioner2/listkuesioner');
 	}
 
 	public function kegiatanDetail($id)
@@ -154,11 +151,45 @@ class kuesioner extends CI_Controller{
 		$data['baik'] = $this->ujian->getBaik($id);
 		$data['cukup'] = $this->ujian->getCukup($id);
 		$data['kurang'] = $this->ujian->getKurang($id);
-		$data['saran'] = $this->db->get_where('s_kegiatan', ['id_kuesioner'=>$id])->result_array();
+		$data['saran'] = $this->db->get_where('s_kegiatan', ['id_ujian'=>$id])->result_array();
 		$data['kegiatan'] = $this->db->get_where('m_ujian', ['id_ujian'=>$id])->row_array();
 		
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('kuesioner/kegiatanDetail', $data);
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
+
+	public function listkuesioner(){
+		
+			$this->akses_mahasiswa();
+			$user = $this->ion_auth->user()->row();
+			$nopeg = $user->username;
+			
+			$getmhsid = $this->db->get_where('mahasiswa',array('nim'=>$nopeg))->result_array();
+			$id_mahasiswa=$getmhsid['0']['id_mahasiswa'];
+			    // Cek apakah mahasiswa sudah mengerjakan kuesioner
+
+			$list_kues = $this->ujian->getListkuesioner($id_mahasiswa);
+
+			// print_r($list_kues);
+			// exit();
+			
+			$data = [
+				'user' => $user,
+        'judul'  => 'Kuesioner',
+        'subjudul'=> 'List Kuesioner',
+				'mhs' 		=> $list_kues,
+			];
+
+			$this->load->view('_templates/dashboard/_header.php', $data);
+			$this->load->view('kuesioner/listkuesioner', $data);
+			$this->load->view('_templates/dashboard/_footer.php');
+	}
+
+
+
+// ------------- KUESIONER Level 2 -----------------------
+
+
+
 }

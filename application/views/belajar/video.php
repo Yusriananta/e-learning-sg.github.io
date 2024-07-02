@@ -25,9 +25,15 @@
                                 <h4 class="text-left mt-1 text-default"><?= $v->judul?></h4>
                               </div>
                               </a>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <small class="text-muted">Last updated : <?= $v->tanggal?></small>
+                                </div>
+                                <div class="col-md-6">
+                                  <small class="text-muted pull-right"><?= $v->views?>x ditonton</small>
+                                </div>
+                              </div>
                               
-                              <!-- <p ><?= $v->deskripsi?></p> -->
-                              <small class="text-muted">Last updated : <?= $v->tanggal?></small>
                             </div>
                           </div>
                          <!-- Closing anchor tag here -->
@@ -88,31 +94,45 @@
 
 <script>
   function search() {
-   // Melakukan AJAX request ke server
-          var searchValue = $("#search").val();
-          // alert("Hallo World!");
-          $.ajax({
-                url: base_url + "belajar/seacrh/",
-                type: "POST", // Atau GET sesuai kebutuhan
-                data: {search: searchValue }, // Data yang ingin Anda kirim ke server
-                success: function(response) {
-                  var todos=JSON.parse(response);
-                  // console.log(todos);
-                  todos.forEach(function(value,index){
-                    // $("#subcontent").replaceWith("sdfsdf");
-                    $("#subcontent").replaceWith(`
-                    <div class="col-md-4">
-                      <div class="card h-100">
-                        <div class="thumbnail">
-                        <img src="${value.thumbnail})" class="img-thumbnail">
-                        </div>
-                      </div>
-                    </div>
-                      `);
-                    console.log(`${value.id}`);
-                  })
-                },
-               
-            }); 
+    var searchValue = $("#search").val();
+    $.ajax({
+        url: base_url + "belajar/seacrh/",
+        type: "POST",
+        data: {search: searchValue },
+        success: function(response) {
+            var videos = JSON.parse(response);
+            var html = ''; // Variable untuk menyimpan markup baru
+
+                videos.forEach(function(video) {
+                    html += `
+                    <div class="row">
+                      <div class="col-md-4">
+                          <div class="card">
+                              <div class="thumbnail">
+                                <img src="${base_url}assets/dist/thumbnail/${video.thumbnail}" class="img-thumbnail">
+                                <div class="caption">
+                                  <a href="${base_url}belajar/detailvideo/${video.id}">
+                                    <div class="video-title">
+                                      <h4 class="text-left mt-1">${video.judul}</h4>
+                                    </div>
+                                  </a>
+                                  <small class="text-muted">Last updated: ${video.tanggal}</small>
+                                </div>
+                              </div>
+                          </div>
+                      </div>`;
+                });
+
+            // Ganti konten HTML di dalam #subcontent dengan yang baru
+            $("#subcontent").html(html);
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    }); 
+
+  function update_views(){
+
   }
+}
 </script>

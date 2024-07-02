@@ -46,7 +46,7 @@ class Ujian_model extends CI_Model {
     {
         $this->db->select('COUNT(id_soal) as jml_soal');
         $this->db->from('tb_soal');
-        $this->db->where('dosen_id', $dosen);
+        $this->db->where('dosen_id', $dosen); 
         return $this->db->get()->row();
     }
 
@@ -169,8 +169,12 @@ class Ujian_model extends CI_Model {
     }
 
     public function getLogujian($ujian_id){
-        $query = "SELECT hs_h_ujian.*, tb_soal.soal FROM tb_soal 
-        LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal WHERE ujian_id='$ujian_id' ORDER BY hs_h_ujian.id_soal";
+        $query = "SELECT hs_h_ujian.*, tb_soal.soal, mahasiswa.id_mahasiswa 
+        FROM tb_soal 
+        LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal 
+        LEFT JOIN mahasiswa ON hs_h_ujian.mahasiswa_id = mahasiswa.id_mahasiswa 
+        WHERE hs_h_ujian.ujian_id = '$ujian_id'
+        ORDER BY hs_h_ujian.id_soal;";
         $result = $this->db->query($query)->result_array();
         $a=0;
         foreach ($result as $row){
@@ -184,7 +188,7 @@ class Ujian_model extends CI_Model {
         $newReturn[]=array(
             'id'=>$row['id'],
             'ujian_id'=>$row['ujian_id'],
-            'mahasiswa_id'=>$row['mahasiswa_id'],
+            'id_mahasiswa'=>$row['id_mahasiswa'],
             'id_soal'=>$row['id_soal'],
             'kunci_jawaban'=>$row['kunci_jawaban'],
             'list_jawaban'=>$row['list_jawaban'],
@@ -201,6 +205,41 @@ class Ujian_model extends CI_Model {
     public function getLoghsujian(){
         return $this->db->get('h_ujian')->result_array();
     }
+
+    public function getLogSujian($ujian_id, $id_mahasiswa){
+      $query = "SELECT hs_h_ujian.*, tb_soal.soal, mahasiswa.id_mahasiswa 
+      FROM tb_soal 
+      LEFT JOIN hs_h_ujian ON hs_h_ujian.id_soal = tb_soal.id_soal 
+      LEFT JOIN mahasiswa ON hs_h_ujian.mahasiswa_id = mahasiswa.id_mahasiswa 
+      WHERE hs_h_ujian.ujian_id = '$ujian_id' AND mahasiswa.id_mahasiswa = '$id_mahasiswa'
+      ORDER BY hs_h_ujian.id_soal;";
+      $result = $this->db->query($query)->result_array();
+      $a=0;
+      foreach ($result as $row){
+      //   if ($row['id_soal'] == $id_soal) {
+      //     $id_soal = $row['id_soal'];
+      // }
+      // print_r($result[$a]['id_soal']);
+      $jawabanDesc=$this->getDiscJwb($result[$a]['id_soal'],$result[$a]['list_jawaban']);
+      $field=$this->getDescJwb($row['list_jawaban']);
+
+      $newReturn[]=array(
+          'id'=>$row['id'],
+          'ujian_id'=>$row['ujian_id'],
+          'id_mahasiswa'=>$row['id_mahasiswa'],
+          'id_soal'=>$row['id_soal'],
+          'kunci_jawaban'=>$row['kunci_jawaban'],
+          'list_jawaban'=>$row['list_jawaban'],
+          'tanggal'=>$row['tanggal'],
+          'soal'=>$row['soal'],
+          'description'=>$jawabanDesc[0][$field]
+      );
+      $a++;
+    }
+
+      return $newReturn;
+  }
+
 
     public function getPertanyaan()
     {
@@ -219,7 +258,7 @@ class Ujian_model extends CI_Model {
             $data = [
                 "pers_no"       => $pers_no,
                 "tanggal"       => $date,
-                "id_kuesioner"  => $kuesioner
+                "id_ujian"  => $kuesioner
             ];
     
             $this->db->insert('a_kegiatan', $data);
@@ -227,12 +266,12 @@ class Ujian_model extends CI_Model {
             $package_id = $this->db->insert_id();
             $result = array();
                 foreach($opsi AS $key => $val){
-                     $result[] = array(
-                      'id_kuesioner'     => $kuesioner,
+                    $result[] = array(
+                      'id_ujian'     => $kuesioner,
                       'id_aksi'          => $package_id,
                       'soal_no'          => $key,
                       'id_opsi'          => $_POST['opsi'][$key]
-                     );
+                    );
                 }      
             //MULTIPLE INSERT TO DETAIL TABLE
             $this->db->insert_batch('k_kegiatan', $result);
@@ -241,7 +280,7 @@ class Ujian_model extends CI_Model {
                 $value = [
                     "pers_no"       => $pers_no,
                     "tanggal"       => $date,
-                    "id_kuesioner"  => $kuesioner,
+                    "id_ujian"  => $kuesioner,
                     "saran"         => $saran
                 ];
 
@@ -254,8 +293,8 @@ class Ujian_model extends CI_Model {
     public function getSBaik($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 4 AND id_kuesioner = $id) as Sbaik, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 4 AND id_ujian = $id) as Sbaik, 
                 ROUND((SELECT Sbaik/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -264,8 +303,8 @@ class Ujian_model extends CI_Model {
     public function getBaik($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 3 AND id_kuesioner = $id) as baik, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 3 AND id_ujian = $id) as baik, 
                 ROUND((SELECT baik/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -274,8 +313,8 @@ class Ujian_model extends CI_Model {
     public function getCukup($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 2 AND id_kuesioner = $id) as cukup, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 2 AND id_ujian = $id) as cukup, 
                 ROUND((SELECT cukup/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -284,8 +323,8 @@ class Ujian_model extends CI_Model {
     public function getKurang($id)
     {
         $query = "SELECT
-                (SELECT COUNT(id_kuesioner) FROM k_kegiatan WHERE id_kuesioner = $id) as jumlah,
-                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 1 AND id_kuesioner = $id) as kurang, 
+                (SELECT COUNT(id_ujian) FROM k_kegiatan WHERE id_ujian = $id) as jumlah,
+                (SELECT COUNT(id_opsi) FROM k_kegiatan WHERE id_opsi = 1 AND id_ujian = $id) as kurang, 
                 ROUND((SELECT kurang/jumlah*100),0) as persen";
 
         return $this->db->query($query)->row_array();
@@ -293,8 +332,25 @@ class Ujian_model extends CI_Model {
 
     public function Nkuesioner($id)
     {
-        $query = "SELECT ROUND((SELECT AVG(id_opsi) FROM k_kegiatan WHERE id_kuesioner = $id),0) as nilai";
+        $query = "SELECT ROUND((SELECT AVG(id_opsi) FROM k_kegiatan WHERE id_ujian = $id),0) as nilai";
 
         return $this->db->query($query)->row_array();
     }
+
+    public function kuesionerhasil($id_mahasiswa){
+      $query ="SELECT * FROM";
+      return $this->db->query($query)->row_array();
+    }
+
+    public function getListkuesioner($id_mahasiswa) {
+      // ambil id dari session user, select tabel mahasiswa berdasarkan id tersebut, sehingga mendapat kelas_id
+      // WHERE b.saran is NULL AND 
+      $query = "SELECT b.id_ujian,b.nama_ujian FROM h_ujian a 
+      left join m_ujian b on a.ujian_id=b.id_ujian
+      left join s_kegiatan c on b.id_ujian=c.id_ujian
+      where c.saran is null and a.mahasiswa_id='$id_mahasiswa';";
+      return $this->db->query($query)->result_array();
+    }
+
+
 }

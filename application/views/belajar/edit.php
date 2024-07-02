@@ -25,9 +25,7 @@
             </div>
             <div class="form-group">
                 <label for="deskripsi">Deskripsi</label>
-                <textarea class="form-control" name="deskripsi" id="deskripsi" placeholder="max 70 karakter" required> 
-                <?= $g_video['deskripsi']?>
-                </textarea>
+                <textarea class="form-control" name="deskripsi" id="deskripsi" placeholder="max 70 karakter" required><?= $g_video['deskripsi']?></textarea>
             </div>
             <div class="form-group">
                 <label for="tumbnail">Video</label>

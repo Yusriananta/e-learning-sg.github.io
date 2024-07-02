@@ -19,11 +19,11 @@
               </div>
             <div class="form-group">
                 <label for="judul">Judul Pembelajaran</label>
-                <input type="text" class="form-control" id="judul" name="judul" placeholder="max 30 karakter" required>
+                <input type="text" class="form-control" id="judul" name="judul" placeholder="Tulis Judul disini" required>
             </div>
             <div class="form-group">
                 <label for="deskripsi">Deskripsi</label>
-                <textarea class="form-control" name="deskripsi" id="deskripsi" placeholder="max 70 karakter" required></textarea>
+                <textarea class="form-control" name="deskripsi" id="deskripsi" placeholder="Tulis Deskripsi disini" required></textarea>
             </div>
             <div class="form-group">
                 <label for="tumbnail">Gambar</label>
@@ -35,7 +35,7 @@
                 <div class="col-mg-9">
                     <input type="file" id="video" name="video" required>
                 </div>
-                <p class="help-block">Hanya file video (mp4) max 100 mb</p>
+                <p class="help-block">Hanya file video (mp4) max 150 mb</p>
             </div>
             <button id="submit" class="btn btn-danger">Upload</button>
         <!-- </form> -->

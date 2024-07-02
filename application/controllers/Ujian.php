@@ -59,7 +59,7 @@ class Ujian extends CI_Controller {
 
     public function master()
 	{
-		 
+		 		// $this->akses_admin();
         $this->akses_dosen();
         $user = $this->ion_auth->user()->row();
         $data = [
@@ -454,8 +454,10 @@ class Ujian extends CI_Controller {
 		$id_tes = $this->encryption->decrypt($id_tes);
 		$data_tes = $this->db->get_where('h_ujian', ['id' => $id_tes])->row_array();
 		$ujian_id = $data_tes['ujian_id'];
-		
 		$mhs	= $this->mhs;
+
+		// print_r($mhs);
+		// exit();
 		
 		// Get Jawaban
 		$list_jawaban = $this->ujian->getJawaban($id_tes);
@@ -486,9 +488,6 @@ class Ujian extends CI_Controller {
 			$cek_jwb 	= $this->soal->getSoalById($id_soal);
 			// print_r($cek_jwb);
 			// exit();
-			
-			
-			
 			$total_bobot = $total_bobot + $cek_jwb->bobot;
 
 			$jawaban == $cek_jwb->jawaban ? $jumlah_benar++ : $jumlah_salah++;
@@ -508,14 +507,8 @@ class Ujian extends CI_Controller {
 			// print_r($hs_jawaban);
 			// exit();
 
-				$this->db->insert('hs_h_ujian', $hs_jawaban);
-			
-				
-			
-				
-			
-				
-	
+			$this->db->insert('hs_h_ujian', $hs_jawaban);
+
 		}
 		
 		$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
@@ -537,32 +530,18 @@ class Ujian extends CI_Controller {
 
 public function logjawaban(){
 	$id_tes = $_GET['ujian_id'];
+	// $id_mhs = $_GET['id_mahasiswa'];
+	$mhs	= $this->mhs->id_mahasiswa;
+	// print_r($mhs);
+	// exit();
 
 	$dhistori = $this->ujian->getLogujian($id_tes);
 
+
+
 	$html = '';
 	$no = 1 ;
-	// print_r($html);
 
-	// $markedLogicalAnswers = [];
-
-	// make a foreach statement for True dan false untuk logjawaban
-
-// 	foreach ($dhistori as $jawaban_item) {
-// 		// Panggil model untuk menyimpan jawaban
-// 		// $this->ujian->getLogujian('');
-
-// 		// Cek jawaban benar atau salah
-// 		$cekstatus = $this->ujian->getJawaban($jawaban_item);
-
-// 		// Jika jawaban benar, ubah status menjadi benar, sebaliknya
-// 		if ($cekstatus) {
-// 				$this->ujian->getLogujian($jawaban_item, 'benar');
-// 		} else {
-// 				$this->ujian->getLogujian($jawaban_item, 'salah');
-// 		} 
-
-// }
 	// kirim data nilai dahulu
 	$data = [
 			// 'ujian' => $ujian,
@@ -574,6 +553,8 @@ public function logjawaban(){
 			'judul'		=> 'Ujian',
 			'subjudul'	=> 'Hasil Ujian',
 	];
+	// print_r($data);
+	// exit();
 
 	$this->load->view('_templates/topnav/_header.php', $data);
 	$this->load->view('ujian/logujian');
