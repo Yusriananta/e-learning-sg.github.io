@@ -1,3 +1,1 @@
-# Aplikasi Ujian Online
-
- Menggunakan CodeIgniter 3
+Aplikasi Ujian Online 
